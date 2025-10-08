@@ -1,8 +1,8 @@
 # The Alcove
 ### ![stream](https://www.shutterstock.com/image-vector/mysterious-night-forest-landscape-swamp-600nw-2329365047.jpg)
-You have grown exhausted. You have been traveling for several days on your journey. You have not seen a single person in what feels like ages. You stop to drink from the stream and rest your weary body.
+You have grown exhausted. You have been traveling for several days. You have not seen a single person in what feels like ages. You stop to drink from the stream and rest your weary body.
 
-After you have rested for sometime you see the weather is starting to turn and clouds are rolling in. You decide to look for shelter for the night.
+After you have rested for some time, you see the weather is starting to turn and clouds are rolling in. You decide to look for shelter for the night.
 
 You spot an alcove hidden in the distance and decide to make your way there. When you reach the alcove, you hear rustling behind you.
 
