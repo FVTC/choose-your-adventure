@@ -7,5 +7,5 @@ You sit down to think about the encounter. As you are pondering what just happen
 
 You sit up and dust off your hands. You feel like you are going crazy. Trying to make sense of what is all going on, you hear a faint humming coming from inside the cave. You feel overwhelmed by this pulling feeling and the events of the day. 
 
-*:city_sunset:[You fall asleep while trying to put it all together.](./scene3.md)
+* :city_sunset:[You fall asleep while trying to put it all together.](./scene3.md)
 
