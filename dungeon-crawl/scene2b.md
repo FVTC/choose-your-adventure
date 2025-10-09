@@ -13,4 +13,4 @@ _For many moons, weary travelers as yourself would find themselves at the openin
 _Quiet and listen boy_ The old man's voice deepened. _I know you feel it. tugging ever so softly, like the smell of grandmother's pie in the window. But heed my words. Don't Follow the hum. If you must travel inside, do it at your own risk, but I repeat. Don't follow the hum._
 
 As the last syllable left the old man's mouth, the rain began to pour. The rain fell with a magnifcient force, as if it was clingy to his warning. Watching the rain, you turn to ask the old man a question and find that he is no where to be seen.
-* :city_sunset:[You fall asleep while mulling the old man's words](./scene7.md)
+* :city_sunset:[You fall asleep while mulling the old man's words](./scene3.md)
