@@ -16,6 +16,6 @@ The 3rd weapon is a very unusual one. It is a sheild. At first, you don't think 
 
 So, which will it be?
 
-[Sword](./scenefinalboss.md)
-[Crossbow](./scenefinalboss.md)
-[Boomerang/Shield](./scenefinalboss.md)
+- [Sword](./sceneFinalBossSword.md)
+- [Crossbow](./sceneFinalBossCrossbow.md)
+- [Boomerang/Shield](./sceneFinalBossShield.md)
