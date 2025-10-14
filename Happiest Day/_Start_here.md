@@ -13,4 +13,5 @@ You get to the haunted house and are brought into a room For the interview, you 
 After a 30-minute interview, George offers you the job and says you would be able to start this Monday. You tell him you have to hurry along, but you will give him a response by the end of the day. George nods enthusiastically and lets you know he's got other interviews for your position. Later that night, you sit by the phone and contemplate taking the job. What do you do
 
 - ✅ [Take The Job](./scene1a.md)
-- ❌ [Find Something Better](./scene1b.md)
+
+- ❌ [Find Something else](.//BoringEnding/scene1b_e.md)
