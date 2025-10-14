@@ -12,5 +12,5 @@ The ground begins to shake around you, you feel uneasy, but you courage persists
 
 You know that your 2 choices are either to strike the monster with the shield, or to throw it off into the distance. It's your move, what do you do?
 
-[Strike him!](./sceneFinalShieldFail.md)
-[Throw it!](./sceneFinalShieldSuccess.md)
+- [Strike him!](./sceneFinalShieldFail.md)
+- [Throw it!](./sceneFinalShieldSuccess.md)
