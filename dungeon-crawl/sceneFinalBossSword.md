@@ -8,5 +8,5 @@ He starts to talk "Oh ho ho! So you are the hero that has come to take my treasu
 
 You can either chop off all of his legs so that he can't move, and then go for it. Or alternatively, you can try and get your sword through his mouth for a sick and somewhat brutal kill. So which will it be?
 
-- [Go for the legs!](./sceneFinalswordsuccess.md)
-- [Ram it in his mouth!](./sceneFinalswordfail.md)
+- [Go for the legs!](./scenefinalswordsuccess.md)
+- [Ram it in his mouth!](./scenefinalswordfail.md)
