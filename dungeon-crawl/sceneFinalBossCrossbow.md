@@ -1,5 +1,5 @@
 # The Shot Of A Lifetime
-
+### ![Throne Room](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAQpfDJKG-hP1sWqpo3Ipp_9oxA_xrbqW0Iw&s)
 Crossbow in hand, you decide to go straight for the boss room.
 
 You look around the room and see a chandelier from above, nice looking carpeting, a throne, and a mean looking monster who sits in the throne.

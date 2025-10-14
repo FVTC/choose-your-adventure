@@ -1,5 +1,5 @@
 # Time To Strike!
-
+### ![Throne Room](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAQpfDJKG-hP1sWqpo3Ipp_9oxA_xrbqW0Iw&s)
 You enter the boss door, and are met with a most lavish of scenary. this room has complete carpeting, a big thronw, a big chandelier, and a great marble walling. You wonder how this si possible since most of the cave has just been rocks and dirt. But then, you see him.
 
 A great big monster give you a shifty stare and gives you a quick overview. You take this opportunity to get a good look at him as well. He has many distinct features, such as a spider like structure, green scales that surround his body, 4 eyes, and 6 pointy legs. Definitely not the most friendly face you've seen today.

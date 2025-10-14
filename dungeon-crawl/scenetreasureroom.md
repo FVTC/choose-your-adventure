@@ -1,5 +1,5 @@
 # The Treasure Room!
-
+### ![Gold room](https://i.pinimg.com/736x/cc/ce/6e/ccce6e5a32b53af7e073af64cf4be000.jpg)
 After many twists and turns inside of this treacheorus cave, you have found it! Exciting treasures of all shapes and sizes loom inside this one cave! There are gold coins, diamonds, and all sorts of wonderful things that will bring you good fortune! But this is not the end of your journey. There is only one way out of this cave, through the boss room.
 
 You begin to panic as you have not thought about actually coming to the end of your journey, you have only set forth on your adventure in good fortune.

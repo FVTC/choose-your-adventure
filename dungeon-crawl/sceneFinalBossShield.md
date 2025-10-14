@@ -1,5 +1,5 @@
 # Unique Opportunity
-
+### ![Throne Room](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAQpfDJKG-hP1sWqpo3Ipp_9oxA_xrbqW0Iw&s)
 You go inside the boss door after grabbing your sheild boomerang contraption, and you are shocked at the decor.
 
 The floor has carpeting, there's a gorgeous chandelier hanging from the ceiling, and there's a big throne at the end of the room looking like it's made of gold. But what appears in front of the throne is what frightens you most.
