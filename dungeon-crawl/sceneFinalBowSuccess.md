@@ -9,9 +9,9 @@ You realize that you can go outside, but first you go back to the treasure room 
 
 The skin of it starts to peel off, and you realize it's a golden crossbow! And all the bolts also happen to be made of gold! You're rich!
 
-With the gold you have, you head back home to go and love a wealthy life.
+With the gold you have, you head back home to go and live a wealthy life.
 
-You got the cross bow ending! Congratulations!
+You got the crossbow ending! Congratulations!
 But this is just 1 of 3 different endings you can acheive, have you acheived the other endings?
 Try again to get the other 3 endings!
 

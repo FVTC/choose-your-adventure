@@ -6,13 +6,13 @@ You begin to panic as you have not thought about actually coming to the end of y
 
 "What will I do?!" You exclaim in great horror, but then out of the corner of your eyes, you see it. The answer to your question.
 
-Beofre you lies 3 weapons, each with a brimming layer of gold on top of them. Unfortunately, they are all 2 handed weapons, so you may only take one with you.
+Before you lies 3 weapons. Unfortunately, they are all 2 handed weapons, so you may only take one with you.
 
 The 1st weapon is a sword. Mighty, fits well in your hands, and has battled many foes before. Great for attacking your enemies head on, but not a very versatile choice as you can only hit your enemy one way.
 
 The 2nd weapon is a crossbow. A very good and accurate ranged weapon. Although not as powerful as the sword in terms of the strength of the weapon, it is very good at hitting any target in anyway. This weapon can provide lots of alternatives towards just straight up hitting the enemy head on.
 
-The 3rd weapon is a very unusual one. It is a sheild. At first, you don't think much of it and throw it into the distance. But out of nowhere, the sheild comes back. "A boomerang shield?" You exclaim. This weapon may not be the most practical in terms of a ranged attack or a head on attack. But it's unusual allure gives you the sense that this weapon might actually be more than what meets the eye and mind at first.
+The 3rd weapon is a very unusual one. It is a shield. At first, you don't think much of it and throw it into the distance. But out of nowhere, the shield comes back. "A boomerang shield?" You exclaim. This weapon may not be the most practical in terms of a ranged attack or a head on attack. But it's unusual allure gives you the sense that this weapon might actually be more than what meets the eye and mind at first.
 
 So, which will it be?
 
