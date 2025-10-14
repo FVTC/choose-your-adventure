@@ -8,5 +8,5 @@ Behind you sits the entrance of the cave. You contemplate leaving; forgetting wh
 
 Troubled, you have to decide.
 >[!CAUTION]
->* [Fight the urge of the hum and investigate the right passage.](./scene6.md)
->* [Let the hum, consume you and follow it down the left passage.](./scene4.md)
+>* :arrow_upper_right:[Fight the urge of the hum and investigate the right passage.](./scene6.md)
+>* :arrow_lower_right:[Let the hum, consume you and follow it down the left passage.](./scene4.md)
