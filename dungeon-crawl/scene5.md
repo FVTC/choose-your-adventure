@@ -19,4 +19,4 @@ With all your might you heave on the hilt. A crackling sound emits from the swor
 What do you do?
 >!CAUTION
 >* [Go back the way you came!](./scenedeadend.md)
->*[Go through the new opening!](./scene7.md)
+>* [Go through the new opening!](./scene7.md)
