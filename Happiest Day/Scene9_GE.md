@@ -9,6 +9,6 @@ You get home and know what you have to do, you head right to bed to figure out w
 As soon as you find the clue, you wake up, you see that it's 10:45 p.m., and get ready for what something is telling you is your final shift. Despite knowing what you have to do, there's still a small part of your brain that's saying we can just ignore this. What do you choose?
 
 
-- ❔ [Finish what you started](./scene10_GE.md)
+- ❔ [Finish what you started](./Scene10_GE.md)
 
 - ❔ [Try to Work Normally](#)

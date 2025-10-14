@@ -8,6 +8,6 @@ You once again fall asleep, this time on your bed, and have the same dream as ye
 
 On your way to your next shift, you question. Should you go do what you saw in today's dream
 
-- ❔ [Follow the Dream](./scene6_GE.md)
+- ❔ [Follow the Dream](./Scene6_GE.md)
 
 - ❔ [Work as Normal](#)

@@ -8,6 +8,6 @@ As you're walking into your brand new job, you find something glowing purple in 
 
 <img src="img/NSJ240TAZ-scaled.jpg" width=300 alt="Shadow Amulet">
 
-- ✅ [Take The amulet](./scene2_GE.md)
+- ✅ [Take The amulet](./Scene2_GE.md)
 
 - ❌ [Leave The amulet](./BadEnding/scene1b.md)

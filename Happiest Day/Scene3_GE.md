@@ -10,6 +10,6 @@ A little spooked by your dream, you wake up and realize it's time for your shift
 
 While you're working at the haunted house and making sure everything's working fine, you think to yourself, should I humor the dream I had and look for that plastic balloon statue
 
-- ❔ [Humor the Dream](./scene4_GE.md)
+- ❔ [Humor the Dream](./Scene4_GE.md)
 
 - ❔ [Work as Normal](./BadEnding/scene1b.md)

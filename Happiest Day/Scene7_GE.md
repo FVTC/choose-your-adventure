@@ -10,6 +10,6 @@ Right where the clues were, you see a picture pointing to a pirate hook. Then yo
 
 On your way to your next shift, you question. Should you go do what you saw in today's dream
 
-- ❔ [Follow the Dream](./scene8_GE.md)
+- ❔ [Follow the Dream](./Scene8_GE.md)
 
 - ❔ [Work as Normal](#)
