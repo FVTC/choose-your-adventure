@@ -12,4 +12,4 @@ On your way to your next shift, you question. Should you go do what you saw in t
 
 - ❔ [Follow the Dream](./Scene8_GE.md)
 
-- ❔ [Work as Normal](#)
+- ❔ [Work as Normal](./Scene8_BE.md)

@@ -8,4 +8,6 @@ Well, while doing your normal work, you stumble upon the same pirate hook you sa
 
 Fully awake, realizing this place has a lot more going on than you thought, you head home as you hear the clock strike 6:00 a.m. Your way home, you think about everything that's happened, and you realize something's telling you there's one final thing you need to collect
 
+<img src="img/9552.jpg" width=300 alt="Hook">
+
 - ✅ [Go home](./Scene9_GE.md)

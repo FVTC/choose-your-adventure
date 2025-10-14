@@ -8,4 +8,6 @@ While doing your work, you decide you have nothing better to do, so you look for
 
 Those rooms, and sure enough, you find the four cupcakes. You grab each one, but before you can do anything, they all disappear, and the amulet starts glowing. Little, and for half a second, you could have sworn you heard someone saying Good job, just two more nights You think to yourself, you're just sleep deprived, so you head home cuz it's 6:00 a.m. and your shift is done
 
+<img src="img/images.jpg" width=300 alt="Cupcakes">
+
 - ✅ [Go home](./Scene7_GE.md)

@@ -10,4 +10,4 @@ As you're walking into your brand new job, you find something glowing purple in 
 
 - ✅ [Take The amulet](./Scene2_GE.md)
 
-- ❌ [Leave The amulet](./BadEnding/scene1b.md)
+- ❌ [Leave The amulet](./Scene1b.md)

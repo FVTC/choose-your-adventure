@@ -1,5 +1,3 @@
-
-
 # Happiest Day
 
 ## Day 0

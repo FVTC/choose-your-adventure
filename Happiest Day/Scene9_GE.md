@@ -11,4 +11,4 @@ As soon as you find the clue, you wake up, you see that it's 10:45 p.m., and get
 
 - ❔ [Finish what you started](./Scene10_GE.md)
 
-- ❔ [Try to Work Normally](#)
+- ❔ [Try to Work Normally](./Scene10_BE.md)

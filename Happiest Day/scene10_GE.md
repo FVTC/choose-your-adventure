@@ -8,4 +8,6 @@ You reached your place of work, the haunted house. Something or someone is givin
 
 Finish your last 30 minutes of today's shift and hear the clock chime 6:00 a.m., you head home feeling accomplished, somehow like you helped people
 
+<img src="img/s-l1200.jpg" width=300 alt="electric guitar">
+
 - ✅ [Go home](./Scene11_GE.md)

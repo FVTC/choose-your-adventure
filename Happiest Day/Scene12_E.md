@@ -1,6 +1,6 @@
 # Happiest Day
 
-## Day 6
+## Good Ending
 
 ### 9:00am
 
