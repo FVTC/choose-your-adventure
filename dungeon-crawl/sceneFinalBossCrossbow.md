@@ -14,5 +14,5 @@ You can either attempt to shoot straight at his eyes in hopes to blind and then 
 
 What will you do?
 
-- [Go for the eyes!](./sceneFinalBowFail.md)
-- [Shoot down the chandelier!](./sceneFinalBowSuccess.md)
+- :boom:[Go for the eyes!](./sceneFinalBowFail.md)
+- :bow_and_arrow:[Shoot down the chandelier!](./sceneFinalBowSuccess.md)

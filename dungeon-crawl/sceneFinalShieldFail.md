@@ -13,4 +13,4 @@ You became a carpenter, and spent your days helping the village install carpetin
 
 Perhaps if you had done something different, your life could have been much better. Care to give it another go?
 
-- [Try Again?](./_starthere.md)
+- :skull:[Try Again?](./_starthere.md)

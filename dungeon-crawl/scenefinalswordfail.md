@@ -13,4 +13,4 @@ It turns out this monster is actually quite good and resourceful with the knight
 
 You should definitely try this adventure again, for this is just the worst ending ever! How disappointing!
 
-- [Try Again?](./_starthere.md)
+- :skull:[Try Again?](./_starthere.md)

@@ -16,4 +16,4 @@ You got the shield ending! Congratulations!
 But this is only 1 of 3 endings, have you done the other endings?
 Try again to see the other endings!
 
-- [Try Again?](./_starthere.md)
+- :repeat:[Try Again?](./_starthere.md)

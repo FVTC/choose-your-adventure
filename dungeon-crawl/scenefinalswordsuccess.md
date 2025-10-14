@@ -17,4 +17,4 @@ You got the sword ending! Congratulations!
 But this is just 1 of 3 endings, have you gotten the other endings?
 Try again to get all the endings!
 
-- [Try Again?](./_starthere.md)
+- :repeat:[Try Again?](./_starthere.md)

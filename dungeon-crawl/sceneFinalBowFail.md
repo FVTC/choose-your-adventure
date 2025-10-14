@@ -15,4 +15,4 @@ With no way out, you simply decide to stay there. You are stuck there until the 
 
 But that wasn't a satisfying ending! You should try again to get a better ending!
 
-- [Try Again?](./_starthere.md)
+- :skull:[Try Again?](./_starthere.md)

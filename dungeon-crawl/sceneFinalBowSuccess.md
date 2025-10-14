@@ -15,4 +15,4 @@ You got the cross bow ending! Congratulations!
 But this is just 1 of 3 different endings you can acheive, have you acheived the other endings?
 Try again to get the other 3 endings!
 
-- [Try Again?](./_starthere.md)
+- :repeat:[Try Again?](./_starthere.md)
