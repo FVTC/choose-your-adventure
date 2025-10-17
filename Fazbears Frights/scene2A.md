@@ -1,8 +1,12 @@
+You call the number and a man answers.
 
-You tinker with the droid and unlock the full message. A cloaked woman pleads for help from someone named *Old Ken Benobi*, who supposedly lives nearby in the canyons.
+"Hello? Hello? Freddy's Pizza and Arcade — where fantasy and fun come to life."
 
-> 
+You clear your throat. "I'm calling about the night‑guard position you listed."
 
-What now?
+The voice hesitates, then softens. "All right. Come down to the location and we'll talk."
 
-- 🏜️ [Sneak out to find the hermit yourself](./scene3A.md)
+
+- [Go to the location](./Scene4A.md)
+
+- [Ask for a phone interview instead](./Scene4B.md)

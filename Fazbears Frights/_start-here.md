@@ -3,6 +3,6 @@
 
 ### Help Wanted
 
->You are broke you've started to run out of cash running on borrowed time to get your rent in. You must find a new job quickly to gain enough cash to pay your rent.
+> The rent is due. You have no savings and the days have stopped bending in your favor. A new job isn't a choice—it's a lifeline.
 
--[Start your job hunting or are you the one being hunted](./scene1.md)
+- [Start your job hunt](./scene1.md)

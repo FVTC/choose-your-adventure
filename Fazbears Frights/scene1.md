@@ -1,12 +1,11 @@
 
->You start to check though news papers looking for job listings when you find one a nightguard gig at a pizzera. Theres a phone number on the page.
+
+> You flip through the classifieds. Between the faded ads and the same old promises, one line catches your eye: night‑guard, Freddy's Pizzeria. A phone number stares back from the page like an offer.
 
 What do you do?
 
--  [Call the number](./scene2A.md)
+- [Call the number](./scene2A.md)
 
--  [Reserch](./scene2B.md)
-
--  [Look for another Job](./scene2C.md)
+- [Keep looking for something else](./scene2C.md)
 
 
