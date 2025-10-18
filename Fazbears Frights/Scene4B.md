@@ -8,6 +8,6 @@ Your keys press into your palm. Behind you, the parking lot is an empty stage. A
 
 What do you do?
 
-- [Step inside and begin your first night shift](./scene4-night.md)
+- [Step inside and begin your first night shift](./scene5-night.md)
 - [Circle the building and check the exterior](./Scene4C.md)
 - [Change your mind and leave](./_start-here.md)
