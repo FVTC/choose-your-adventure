@@ -1,0 +1,1 @@
+You almost dodged Spazmatizm's Cursed Flames but you did get it doing like no damage, but you were able to avoid Retinazers.  You start to use your wings and aim your bananarang at [Retinazer](./scene1A1a.md)/[Spazmatizm](./scene1A1b.md)

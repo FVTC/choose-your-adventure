@@ -1,0 +1,1 @@
+You dodge Spazmatizm's Cursed Flames, narrowly avoiding Retinazers laser as well.  Leaping up, you take flight and begin to summon meteors, and begin to aim your Sky Fracture at [Retinazer](./scene3A1a.md)/[Spazmatizm](./scene3A2a.md)

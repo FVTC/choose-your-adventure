@@ -1,0 +1,2 @@
+You stay your distance trying to fire arrows at Retinazer and you just keep missing you can hit him. While Spazmatizm just watches you in shock as your arrows fly past Retinazer.
+[Keep-trying](./scene5C.md)

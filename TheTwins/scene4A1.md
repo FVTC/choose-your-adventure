@@ -1,0 +1,1 @@
+You dodge Spazmatizm's Cursed Flames, narrowly avoiding Retinazers laser as well.  Leaping up, you take flight and aim your whip towwards [Retinazer](./scene4A1a.md)/[Spazmatizm](./scene4A2a.md)

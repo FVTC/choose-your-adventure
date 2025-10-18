@@ -1,0 +1,1 @@
+You rush towards Retinazer, narrowly dodging Spazmatizm's flames, but taking a hit to the arm from Retinazer's laser.  A little hurt, you take flight and begin to summon meteors, and aim your Sky Fracture at [Retinazer](./scene3A2a.md)/[Spazmatizm](./scene3A2b.md)
