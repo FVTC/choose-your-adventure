@@ -1,3 +1,5 @@
+<img src="PhoneGuyUCN.webp" alt="Phone Guy" style="width:250px;height:250px;object-fit:cover;display:block;" />
+
 You call the number and a man answers.
 
 "Hello? Hello? Freddy's Pizza and Arcade — where fantasy and fun come to life."
