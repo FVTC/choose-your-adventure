@@ -1,5 +1,5 @@
-# Scene 6F — The Long Way
+# Scene6f — The Crystal of Eldor
 
-The safe road costs you days, but you reach the temple unscathed. The air hums with power — something ancient watches.
+You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
 
-- [Go to Scene 7E](scene7E.md)
+[Continue your journey](scene7F.md)

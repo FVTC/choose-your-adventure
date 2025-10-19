@@ -1,8 +1,5 @@
-# Scene 5K — Into the Abyss
+# Scene5k — The Crystal of Eldor
 
-You leap into the pit, light clutched in your hand. The shadows close around you, whispering every doubt you’ve ever had. At the bottom lies a mirror — reflecting not your face, but the Archmage’s, smiling coldly.
+You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
 
-“You never understood, apprentice. Balance is a myth — control is peace.”
-
-- [Go to Scene 6U](scene6U.md) — Shatter the mirror.
-- [Go to Scene 6V](scene6V.md) — Listen to his words.
+[Continue your journey](scene6K.md)

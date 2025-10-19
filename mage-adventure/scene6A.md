@@ -1,5 +1,5 @@
-# Scene 6A — The Pact
+# Scene6a — The Crystal of Eldor
 
-You clasp the elf’s hand. Magic surges — not light or dark, but both. “Then we end the cycle,” she says. Together, you travel toward the temple where the crystal awaits.
+You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
 
-- [Go to Scene 7A](scene7A.md)
+[Continue your journey](scene7A.md)

@@ -1,5 +1,5 @@
-# Scene 6C — The Forest’s Gift
+# Scene6c — The Crystal of Eldor
 
-You place the shard in the roots. Light spreads, and the forest sighs in relief. A seed forms in your palm — alive with balanced power.
+You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
 
-- [Go to Scene 7C](scene7C.md)
+[Continue your journey](scene7C.md)

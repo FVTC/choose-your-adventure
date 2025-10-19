@@ -1,5 +1,5 @@
-# Scene 6K — Pursuit
+# Scene6k — The Crystal of Eldor
 
-You track her north. At dawn, you find a trail of light — and the faint hum of the true Crystal.
+You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
 
-- [Go to Scene 7J](scene7J.md)
+[Continue your journey](scene7K.md)

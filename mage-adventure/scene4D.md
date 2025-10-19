@@ -1,8 +1,5 @@
-# Scene 4D — Interrogation at Dawn
+# Scene4d — The Crystal of Eldor
 
-You and the captain drag the elf to the barracks. She refuses to speak, even under binding charms. When dawn breaks, she mutters one thing before the spell silences her: “The Archmage is not what he seems.”
+You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
 
-Before you can question her further, the captain collapses — poisoned wine. The elf smiles faintly. “You should have listened.”
-
-- [Go to Scene 5G](scene5G.md) — Chase after the escaping elf.
-- [Go to Scene 5H](scene5H.md) — Search the captain’s desk for clues.
+[Continue your journey](scene5D.md)

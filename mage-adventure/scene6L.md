@@ -1,5 +1,5 @@
-# Scene 6L — Return to Lies
+# Scene6l — The Crystal of Eldor
 
-The Archmage listens silently. “Good work,” he says. But his eyes glow faintly — the same color as the shard. He’s changed.
+You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
 
-- [Go to Scene 7K](scene7K.md)
+[Continue your journey](scene7L.md)

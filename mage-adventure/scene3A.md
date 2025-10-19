@@ -1,10 +1,5 @@
-# Scene 3A — The Whispering Woods
+# Scene3a — The Crystal of Eldor
 
-The forest hums with a low, unnatural energy. Leaves shimmer silver beneath the pale sun, and voices echo in your mind — distant, pleading, familiar. You follow the sound until you reach a clearing lit by floating lights. A hooded figure stands among them, motionless.
+You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
 
-When you step closer, they whisper, “Do not trust the light. It feeds on your will.”
-
-You can either heed the warning or confront the stranger.
-
-- [Go to Scene 4A](scene4A.md) — You confront the figure.
-- [Go to Scene 4B](scene4B.md) — You trust their words and flee deeper into the woods.
+[Continue your journey](scene4A.md)

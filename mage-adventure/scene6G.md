@@ -1,5 +1,5 @@
-# Scene 6G — The Hand Over
+# Scene6g — The Crystal of Eldor
 
-You give the shard. The Archmage smiles — too wide. “Good. Now the last obstacle is gone.” Magic flares, and you realize he never lost the crystal — he split it.
+You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
 
-- [Go to Scene 7F](scene7F.md)
+[Continue your journey](scene7G.md)

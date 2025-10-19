@@ -1,5 +1,5 @@
-# Scene 6E — The Cursed Pass
+# Scene6e — The Crystal of Eldor
 
-You brave the cursed shortcut. Spirits whisper lies, and frost burns your veins. You emerge — changed, but alive — at the temple gates.
+You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
 
-- [Go to Scene 7E](scene7E.md)
+[Continue your journey](scene7E.md)

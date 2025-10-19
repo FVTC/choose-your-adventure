@@ -1,5 +1,5 @@
-# Scene 6J — Loyalty Bound
+# Scene6j — The Crystal of Eldor
 
-You refuse her offer. She vanishes, disappointed. Behind her, shadows rise — loyal to her cause. You’re forced to run, heart heavy.
+You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
 
-- [Go to Scene 7I](scene7I.md)
+[Continue your journey](scene7J.md)

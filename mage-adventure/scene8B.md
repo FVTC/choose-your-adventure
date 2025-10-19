@@ -1,10 +1,5 @@
+# Scene8b — The Crystal of Eldor
 
-# 🎯 Scene 8B: Call to Action
+You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
 
-You’re chosen to lead the final assault. The cloaked woman watches from the command tower.
-
-> “May the Spark be with you.”
-
-You climb into your starfighter, heart pounding, as the fleet launches toward the looming metal moon.
-
-- 🚀 [Begin the final run](./scene9A.md)
+[Continue your journey](scene9B.md)

@@ -1,8 +1,5 @@
-# Scene 5L — Retreat and Reflection
+# Scene5l — The Crystal of Eldor
 
-You escape into the snow as the cave collapses. The sky above burns with streaks of aurora — the crystal’s energy leaking into the world. You feel small, powerless… and free.
+You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
 
-The shard hums, responding to your thoughts. You could still shape its destiny.
-
-- [Go to Scene 6W](scene6W.md) — Seek allies to help rebuild the crystal.
-- [Go to Scene 6X](scene6X.md) — Hide the shard forever.
+[Continue your journey](scene6L.md)

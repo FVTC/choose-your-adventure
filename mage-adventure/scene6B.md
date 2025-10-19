@@ -1,5 +1,5 @@
-# Scene 6B — The Lone Path
+# Scene6b — The Crystal of Eldor
 
-You turn away. “I make my own fate.” Her expression hardens. “Then you’ll make the same mistakes.” She vanishes in smoke, leaving silence behind.
+You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
 
-- [Go to Scene 7B](scene7B.md)
+[Continue your journey](scene7B.md)

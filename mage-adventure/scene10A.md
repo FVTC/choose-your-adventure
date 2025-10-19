@@ -1,8 +1,5 @@
+# Scene10a — The Crystal of Eldor
 
-# 💥 Ending: Failure
+You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
 
-You rely on the computer — but the shot misses. Dominion fighters close in. Your ship is destroyed in a flash of light.
-
-Without your spark, the rebellion fades into silence.
-
-> ☠️ Sometimes, courage isn’t enough.
+[Continue your journey](scene10A.md)

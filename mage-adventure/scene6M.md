@@ -1,5 +1,5 @@
-# Scene 6M — The Dark Bargain
+# Scene6m — The Crystal of Eldor
 
-You take the black shard. Power floods your veins — intoxicating. Lyssara nods. “Now you see. Light and dark are one.”
+You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
 
-- [Go to Scene 7L](scene7L.md)
+[Continue your journey](scene7M.md)

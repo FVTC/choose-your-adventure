@@ -1,5 +1,5 @@
-# Scene 6D — Defiance
+# Scene6d — The Crystal of Eldor
 
-You refuse. The forest roars, branches lashing like whips. You barely escape, but your shard grows darker — feeding on your fear.
+You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
 
-- [Go to Scene 7D](scene7D.md)
+[Continue your journey](scene7D.md)

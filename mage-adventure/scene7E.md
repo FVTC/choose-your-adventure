@@ -1,10 +1,5 @@
+# Scene7e — The Crystal of Eldor
 
-# 💔 Scene 7E: Ken’s Sacrifice
+You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
 
-You watch as Old Ken locks blades with the masked enforcer — then lets go of the fight.
-
-He becomes one with the Spark as you escape.
-
-You board the ship with the others, shaken but alive.
-
-- 🌠 [Fly to the rebel base with the stolen plans](./scene8A.md)
+[Continue your journey](scene8E.md)

@@ -1,5 +1,5 @@
-# Scene 6I — Oath of Balance
+# Scene6i — The Crystal of Eldor
 
-Your blood joins hers, glowing gold and silver. The shard stabilizes. “Balance restored — not by one, but by two,” she whispers.
+You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
 
-- [Go to Scene 7H](scene7H.md)
+[Continue your journey](scene7I.md)

@@ -1,8 +1,5 @@
-# Scene 5I — Severing the Bond
+# Scene5i — The Crystal of Eldor
 
-You chant the counterspell, but the connection resists violently. The shard glows crimson, then black. The leader screams, clutching his head — and collapses.
+You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
 
-You’ve broken their link, but the shard now pulses with unstable energy.
-
-- [Go to Scene 6Q](scene6Q.md) — Attempt to purify it.
-- [Go to Scene 6R](scene6R.md) — Seal it within your satchel and move on.
+[Continue your journey](scene6I.md)

@@ -1,5 +1,5 @@
-# Scene 6H — Defiance
+# Scene6h — The Crystal of Eldor
 
-You hold the shard back. “You’ve lied to us all.” The Archmage sighs. “You’ll understand when you’ve lived as long as I.” Lightning crackles between you both.
+You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
 
-- [Go to Scene 7G](scene7G.md)
+[Continue your journey](scene7H.md)
