@@ -1,10 +1,5 @@
+# Scene 6C — The Forest’s Gift
 
-# 🔓 Scene 6C: Solo Rescue
+You place the shard in the roots. Light spreads, and the forest sighs in relief. A seed forms in your palm — alive with balanced power.
 
-You break into the prison wing alone and free the cloaked woman. But you’re cornered by an armored figure with a red energy blade — the Masked Enforcer.
-
-Old Ken arrives just in time. The two clash, blades humming in the darkness.
-
-> “Run,” he says. “You’re the spark now.”
-
-- 💔 [Escape while Old Ken holds him off](./scene7E.md)
+- [Go to Scene 7C](scene7C.md)

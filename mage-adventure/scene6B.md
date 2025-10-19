@@ -1,12 +1,5 @@
+# Scene 6B — The Lone Path
 
-# 🛰️ Scene 6B: The Rescue Mission
+You turn away. “I make my own fate.” Her expression hardens. “Then you’ll make the same mistakes.” She vanishes in smoke, leaving silence behind.
 
-Disguised in stolen armor, you and your allies infiltrate the Dominion battle station.
-
-You find the cloaked woman in a high-security cell, defiant and unbroken. Together, you spring her free — but now alarms are blaring.
-
-> “I knew someone would come,” she says. “Now let’s get out alive.”
-
-- 🔫 [Shoot your way to the hangar bay](./scene7C.md)
-
-- 🐒 [Let the hairy co-pilot cause a distraction while you sneak out](./scene7D.md)
+- [Go to Scene 7B](scene7B.md)
