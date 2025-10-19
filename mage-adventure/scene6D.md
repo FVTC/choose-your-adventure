@@ -1,5 +1,5 @@
-# Scene6d — The Crystal of Eldor
+# Scene Scene6D — Ending: Ash Road (Neutral)
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+Your betrayal backfires. You run with a spark cupped in your hands. It keeps you warm, not powerful.
 
-[Continue your journey](scene7D.md)
+[Epilogue — Neutral](epilogue-neutral.md)

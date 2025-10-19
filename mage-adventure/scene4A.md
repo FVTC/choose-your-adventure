@@ -1,5 +1,8 @@
-# Scene4a — The Crystal of Eldor
+# Scene 4A — Terms of Freedom
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+Lyssara holds out a hand. “Share the crystal or lose it forever. Magic belongs to all.” Your shard steadies in her presence.
 
-[Continue your journey](scene5A.md)
+The forest leans closer, listening for your answer.
+
+- [Go to Scene 5A](scene5A.md) — Join her to rebuild the crystal for all. *(Balance route)*
+- [Go to Scene 5B](scene5B.md) — Pretend to agree, plan to betray. *(Doom route)*

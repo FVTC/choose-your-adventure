@@ -1,5 +1,6 @@
-# Scene5f — The Crystal of Eldor
+# Scene 5F — Useful Death
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+You let the man die and sell the story. The city howls for Veilborn blood. Your shard drinks the sound.
 
-[Continue your journey](scene6F.md)
+- [Go to Scene 6K](scene6K.md) — Lead the raid on the slums. *(Doom ending path)*
+- [Go to Scene 6L](scene6L.md) — Hunt Lyssara yourself. *(Doom ending path)*

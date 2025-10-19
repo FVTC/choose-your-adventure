@@ -1,5 +1,5 @@
-# Scene6h — The Crystal of Eldor
+# Scene Scene6H — Ending: Archivist of Ash (Doom)
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+You burn the files and the doubts together. History becomes whatever you say it is — until even you forget the truth.
 
-[Continue your journey](scene7H.md)
+[Epilogue — Doom](epilogue-doom.md)

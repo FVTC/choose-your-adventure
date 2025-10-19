@@ -1,5 +1,5 @@
-# Scene6p — The Crystal of Eldor
+# Scene Scene6P — Ending: Quiet Ward (Neutral)
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+You disappear with the survivors. Magic becomes a fence against winter, not a crown.
 
-[Continue your journey](scene7P.md)
+[Epilogue — Neutral](epilogue-neutral.md)

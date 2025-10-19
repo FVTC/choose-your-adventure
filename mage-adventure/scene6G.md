@@ -1,5 +1,5 @@
-# Scene6g — The Crystal of Eldor
+# Scene Scene6G — Ending: Hound of the Council (Doom)
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+You lead the hunt. Doors splinter. Prayers choke. The shard in your pocket hums like approval.
 
-[Continue your journey](scene7G.md)
+[Epilogue — Doom](epilogue-doom.md)

@@ -1,5 +1,8 @@
-# Scene4f — The Crystal of Eldor
+# Scene 4F — Blade Before Prayer
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+You strike. The leader laughs — delighted. “Good. You understand power.” Your shard darkens, eager.
 
-[Continue your journey](scene5F.md)
+At your feet lies a fallen mask and a path you can’t unwalk.
+
+- [Go to Scene 5G](scene5G.md) — Claim the false crystal’s power. *(Doom route)*
+- [Go to Scene 5H](scene5H.md) — Burn the rite and rescue captives. *(Balance route)*

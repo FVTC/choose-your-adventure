@@ -1,5 +1,7 @@
-# Scene6i — The Crystal of Eldor
+# Scene 6I — Ending: Ink and Ember (Balance)
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+You and Thorne seize the archives. Names of the vanished fill the plazas; bells toll for truth instead of death. The Archmage flees into irrelevance.
 
-[Continue your journey](scene7I.md)
+The crystal hums like a heartbeat you don’t own.
+
+[Epilogue — Balance](epilogue-balance.md)

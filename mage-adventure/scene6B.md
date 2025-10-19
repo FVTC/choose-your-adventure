@@ -1,5 +1,7 @@
-# Scene6b — The Crystal of Eldor
+# Scene Scene6B — Ending: Crown of Thorns (Doom)
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+You bind the land to the crystal. Rivers kneel. Mountains bow. People break.
 
-[Continue your journey](scene7B.md)
+Your name becomes a warning carved on city gates.
+
+[Epilogue — Doom](epilogue-doom.md)

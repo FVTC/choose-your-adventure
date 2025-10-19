@@ -1,5 +1,7 @@
-# Scene6a — The Crystal of Eldor
+# Scene 6A — Ending: Roots of Light (Balance)
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+You bind crystal to soil, oath to breath. Magic returns like rain — slow, for everyone. No thrones. No cages.
 
-[Continue your journey](scene7A.md)
+The Archmage’s spells die in his mouth. The land chooses itself.
+
+[Epilogue — Balance](epilogue-balance.md)

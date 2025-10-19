@@ -1,5 +1,8 @@
-# Scene3c — The Crystal of Eldor
+# Scene 3C — Teeth of the North
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+The mountains knife the sky. In a cave below a black glacier, bone-masked cultists chant around a false, bleeding crystal. The leader speaks your name.
 
-[Continue your journey](scene4C.md)
+Your shard answers — a note of warning.
+
+- [Go to Scene 4E](scene4E.md) — Watch the rite from the shadows.
+- [Go to Scene 4F](scene4F.md) — Strike first, no mercy.

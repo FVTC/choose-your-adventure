@@ -1,5 +1,6 @@
-# Scene5d — The Crystal of Eldor
+# Scene 5D — Paper Execution
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+Your signature is a blade. The council smiles. Your shard grows colder, heavier.
 
-[Continue your journey](scene6D.md)
+- [Go to Scene 6G](scene6G.md) — Take command of the hunt. *(Doom ending path)*
+- [Go to Scene 6H](scene6H.md) — Quiet doubt; burn the evidence. *(Doom ending path)*

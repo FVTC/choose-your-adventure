@@ -1,5 +1,6 @@
-# Scene5a — The Crystal of Eldor
+# Scene 5A — Forge of Two
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+With Lyssara you set the shard on living roots. It sings in two notes — yours and hers. Magic flows outward instead of up.
 
-[Continue your journey](scene6A.md)
+- [Go to Scene 6A](scene6A.md) — Bind the crystal to the land. *(Balance ending path)*
+- [Go to Scene 6B](scene6B.md) — Bind the land to the crystal. *(Doom ending path)*

@@ -1,5 +1,6 @@
-# Scene5e — The Crystal of Eldor
+# Scene 5E — Heartward
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+You purge the poison and choose the messy road of saving rather than winning. Thorne lives; his loyalty is flint and steel.
 
-[Continue your journey](scene6E.md)
+- [Go to Scene 6I](scene6I.md) — March on the council records. *(Balance ending path)*
+- [Go to Scene 6J](scene6J.md) — Evacuate civilians before the purge. *(Balance ending path)*

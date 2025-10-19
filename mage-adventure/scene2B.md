@@ -1,5 +1,8 @@
-# Scene2b — The Crystal of Eldor
+# Scene 2B — Questions and Cracks
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+“Who took it?” Your voice echoes. The Archmage hesitates — a hairline fracture in his composure. “The **Veilborn**. Fanatics. They think magic should be free.”
 
-[Continue your journey](scene3B.md)
+A whisper slithers from your shard: *Not stolen. Unbound.* The Archmage flinches at the sound.
+
+- [Go to Scene 3C](scene3C.md) — Hunt the Veilborn in the northern mountains.
+- [Go to Scene 3D](scene3D.md) — Go to the capital to expose their spies.

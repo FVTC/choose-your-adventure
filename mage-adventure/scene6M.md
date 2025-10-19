@@ -1,5 +1,5 @@
-# Scene6m — The Crystal of Eldor
+# Scene Scene6M — Ending: Sundering (Doom)
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+Oaths break like glass. Seas rise. The sky splits to show what it was holding back.
 
-[Continue your journey](scene7M.md)
+[Epilogue — Doom](epilogue-doom.md)

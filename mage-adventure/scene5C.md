@@ -1,5 +1,6 @@
-# Scene5c — The Crystal of Eldor
+# Scene 5C — Break the Seal
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+You cut the prisoner’s wards; she’s no captive — she’s bait. Sirens ring. You run under a sky thinning to gray.
 
-[Continue your journey](scene6C.md)
+- [Go to Scene 6E](scene6E.md) — Carry proof to the people. *(Balance ending path)*
+- [Go to Scene 6F](scene6F.md) — Vanish into the wild with her. *(Neutral ending path)*

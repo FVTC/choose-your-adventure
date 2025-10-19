@@ -1,5 +1,7 @@
-# Scene6e — The Crystal of Eldor
+# Scene 6E — Ending: The People’s Light (Balance)
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+You reveal the records in the square. The crowd breaks the council’s doors, not with fire — with refusal. Magic withdraws from tyrants and settles in kitchens, fields, and clinics.
 
-[Continue your journey](scene7E.md)
+Power becomes work. Work becomes wonder.
+
+[Epilogue — Balance](epilogue-balance.md)

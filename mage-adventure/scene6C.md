@@ -1,5 +1,5 @@
-# Scene6c — The Crystal of Eldor
+# Scene Scene6C — Ending: Knife of Ceremony (Doom)
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+At the ritual’s peak you cut out the light and keep it. The world learns a smaller sky. Your smile never quite reaches your eyes.
 
-[Continue your journey](scene7C.md)
+[Epilogue — Doom](epilogue-doom.md)

@@ -1,5 +1,8 @@
-# Scene3a — The Crystal of Eldor
+# Scene 3A — Voices in the Green
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+The Whispering Woods breathe around you. A hooded elf steps from the fog, scar bright on her cheek. “I’m **Lyssara**. Your council caged the crystal. We intend to set it free.”
 
-[Continue your journey](scene4A.md)
+Your shard warms; it knows her.
+
+- [Go to Scene 4A](scene4A.md) — Hear Lyssara’s offer.
+- [Go to Scene 4B](scene4B.md) — Reject her and press deeper alone.

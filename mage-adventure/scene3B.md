@@ -1,5 +1,8 @@
-# Scene3b — The Crystal of Eldor
+# Scene 3B — Gates of Elysreach
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+Captain Thorne eyes your robes like a loaded crossbow. “Veilborn slipped past us. We caught one elf — claims the council are the real thieves.”
 
-[Continue your journey](scene4B.md)
+In the cells, the prisoner whispers, “Your Archmage split the crystal. You carry a piece.” Your shard thrums.
+
+- [Go to Scene 4C](scene4C.md) — Secretly hear the prisoner out.
+- [Go to Scene 4D](scene4D.md) — Interrogate with the captain present.

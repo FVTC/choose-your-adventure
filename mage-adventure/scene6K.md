@@ -1,5 +1,5 @@
-# Scene6k — The Crystal of Eldor
+# Scene Scene6K — Ending: Red Streets (Doom)
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+You flood the slums with soldiers. The city quiets. The ground remembers.
 
-[Continue your journey](scene7K.md)
+[Epilogue — Doom](epilogue-doom.md)

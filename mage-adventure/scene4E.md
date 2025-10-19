@@ -1,5 +1,7 @@
-# Scene4e — The Crystal of Eldor
+# Scene 4E — Ending: The Husk Choir (Doom)
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+You watch too long. The false crystal births a song that hollows you out from the inside. When you speak, your voice is not your own.
 
-[Continue your journey](scene5E.md)
+You become the cult’s perfect witness — silent, obedient, empty.
+
+[Continue to Epilogue — Doom](epilogue-doom.md)

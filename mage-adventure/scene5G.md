@@ -1,5 +1,6 @@
-# Scene5g — The Crystal of Eldor
+# Scene 5G — Crown of Glass
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+You lift the false crystal. It carves a throne inside your chest. Power tastes like winter.
 
-[Continue your journey](scene6G.md)
+- [Go to Scene 6M](scene6M.md) — Shatter the world’s oaths. *(Doom ending path)*
+- [Go to Scene 6N](scene6N.md) — Demand the true crystal reveal itself. *(Doom ending path)*

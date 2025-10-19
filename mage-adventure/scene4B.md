@@ -1,5 +1,7 @@
-# Scene4b — The Crystal of Eldor
+# Scene 4B — Ending: The Forest’s Judgment (Neutral)
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+You push past her. The woods awaken — roots seize your ankles, thorns pierce your wrists. “Then be without it,” the forest murmurs.
 
-[Continue your journey](scene5B.md)
+Your shard dims to ash. You stagger free, alive but severed from magic. The world quiets — too quiet.
+
+[Continue to Epilogue — Neutral](epilogue-neutral.md)

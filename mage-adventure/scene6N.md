@@ -1,5 +1,7 @@
-# Scene6n — The Crystal of Eldor
+# Scene Scene6N — Ending: True Name (Doom)
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+You force the crystal to speak. It teaches you a word that empties cities.
 
-[Continue your journey](scene7N.md)
+You say it once.
+
+[Epilogue — Doom](epilogue-doom.md)

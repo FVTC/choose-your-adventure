@@ -1,5 +1,5 @@
-# Scene6f — The Crystal of Eldor
+# Scene Scene6F — Ending: Vanishings (Neutral)
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+You and the freed spy fade into forests and markets, teaching small magics to small lives.
 
-[Continue your journey](scene7F.md)
+[Epilogue — Neutral](epilogue-neutral.md)

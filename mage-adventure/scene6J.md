@@ -1,5 +1,7 @@
-# Scene6j — The Crystal of Eldor
+# Scene 6J — Ending: Hands First (Balance)
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+You empty the districts before the purge can start. When the army arrives, there’s no one left to kill — only letters pinned to doors: *We are not your fuel.*
 
-[Continue your journey](scene7J.md)
+The crystal brightens without a master.
+
+[Epilogue — Balance](epilogue-balance.md)

@@ -1,5 +1,6 @@
-# Scene5b — The Crystal of Eldor
+# Scene 5B — Knife Behind Smile
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+You promise freedom and prepare a cage. The shard purrs at your cruelty.
 
-[Continue your journey](scene6B.md)
+- [Go to Scene 6C](scene6C.md) — Seize the crystal at the ritual’s peak. *(Doom ending path)*
+- [Go to Scene 6D](scene6D.md) — Betrayal fails; flee with a scrap of light. *(Neutral ending path)*

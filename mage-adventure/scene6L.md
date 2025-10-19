@@ -1,5 +1,5 @@
-# Scene6l — The Crystal of Eldor
+# Scene Scene6L — Ending: Hunter’s Moon (Doom)
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+You corner Lyssara beneath a dead tree. Her last word is your name. It follows you home.
 
-[Continue your journey](scene7L.md)
+[Epilogue — Doom](epilogue-doom.md)

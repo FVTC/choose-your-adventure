@@ -1,5 +1,5 @@
-# Scene6o — The Crystal of Eldor
+# Scene Scene6O — Ending: Afterfire Gardens (Balance)
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+Survivors plant in ash. Children learn spells from rain, not from chains. Lyssara laughs like someone who finally slept.
 
-[Continue your journey](scene7O.md)
+[Epilogue — Balance](epilogue-balance.md)

@@ -1,5 +1,6 @@
-# Scene5h — The Crystal of Eldor
+# Scene 5H — Ash for Seeds
 
-You advance in your quest for the Crystal of Eldor. Choices made here shift the balance between light and shadow.
+You burn the rite and cut chains. The captives’ first breaths are prayers. Your shard brightens, not blinding — steady.
 
-[Continue your journey](scene6H.md)
+- [Go to Scene 6O](scene6O.md) — Guide survivors home and speak truth. *(Balance ending path)*
+- [Go to Scene 6P](scene6P.md) — Disappear with them to build anew. *(Neutral ending path)*
