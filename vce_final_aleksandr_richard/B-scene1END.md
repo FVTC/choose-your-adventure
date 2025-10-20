@@ -1,0 +1,3 @@
+# 🪨 Scene 9: The Underground Sanctuary at the bottom of the Cave
+
+The portal pulls you in as you vision twists and distorts. You feel as if you are under the weight of a thousand stones and your chest burns for a fresh breath. This seems to go on for just a moment before your vision slowly starts to return and your chest takes a much needed breath. As you breath in your nostrils are filled with a familiar smell and your ears with an even more familiar sound. Regaining your senses, you find youself seated in the tavern in which you began. Did that really happen, was any of it real of did you imagine the whole thing?

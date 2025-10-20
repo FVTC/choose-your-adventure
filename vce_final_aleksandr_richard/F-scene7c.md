@@ -1,0 +1,4 @@
+# 🔊 Scene 7С: The  Seal
+The rune passage hums like a living heart. You reach out — the wall beneath your palm vibrates with power. Blue and gold runes twist into spirals,  forming a massive **seal** that fills the tunnel’s end. You feel something inside yourself. You concentrate and wall collapses, revealing a vast **stone bridge** spanning across a deep chasm filled with molten veins of rock. You cross carefully, every step shaking the bridge, until a massive stone gate looms before you —  engraved with words you can barely read: **“Only Strength Shall Pass.”**
+
+- You cross carefully, every step shaking the bridge, until a massive stone gate looms before you —  engraved with words you can barely read: [Only Strength Shall Pass](./F-scene8.md).

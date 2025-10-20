@@ -1,0 +1,3 @@
+# 🪨 Scene 9: The Underground Sanctuary at the bottom of the Cave
+
+The two of you agree that you both have arned your respective crystals shards and head out of the cave peacefully, both newly empowered by the Earth Crystal. As the two of you exit the cave, you are greated by the townsfolk, who come to the forest after the earthquake to investigate. Great them as the Champions of the Earth Crystal. 

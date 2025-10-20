@@ -1,0 +1,4 @@
+# 🧩 Scene 7B: The Control Rune
+You weave between the awakened guardians, their stone blades scraping against the walls. You reach for it, and a sudden tremor shakes the chamber. You press your hand to the rune.  It burns hot under your touch - power building, unstable.  The guardians freeze mid-motion, their bodies cracking apart. The rune's light floods the room - and the floor collapses beneath you. You land hard in a new chamber, surrounded by **colossal stone doors**.  Symbols of power are carved deep into them,  and through the cracks you hear **rumbling - like something awakening**.
+
+- By **disabling the control rune**, you stopped the guardians but unleashed something deeper.You now stand at the entrance to [The Trials of Stone](./F-scene8.md).
