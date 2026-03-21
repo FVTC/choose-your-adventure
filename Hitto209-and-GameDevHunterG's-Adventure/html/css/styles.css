@@ -1,0 +1,104 @@
+header{
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+}
+body{
+    color: red;
+    margin: 0;
+    padding: 0;
+    font-family: 'Times New Roman', Times, serif;
+}
+h1{
+    margin: 15px;
+    padding: 30px;
+}
+main{
+    max-width: 1200px;
+    margin: auto;
+    font-size: 20px;
+}
+nav ul{
+    display: flex;
+    justify-content: space-evenly;
+    gap: 2rem;
+    list-style: none;
+}
+nav a{
+    display: block;
+    padding: 20px;
+    text-decoration: none;
+    color: white;
+    font-size: 1.5em;
+    margin-top: 10px;
+    border-radius: 20px;
+}
+nav a:hover{
+    background-color: white;
+    color: red;
+}
+#flex-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 7rem;
+}
+.card{
+    max-width: 300px;
+    background-color: antiquewhite;
+    padding: 15px;
+    border-radius: 15px;
+    border-style: solid;
+    color: black;
+}
+.card-photo{
+    width: 150px;
+    height: 150px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.card-photo img{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+.name, .species, .class{
+    text-align: center;
+}
+.name{
+    font-size: 2rem;
+}
+.species{
+    font-size: 1.75rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+.class{
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+#D20, #D8{
+    margin: auto;
+    width: 400px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+}
+#D20-result, #D8-result{
+    text-align: center;
+    font-size: 4rem;
+    color: grey;
+}
+#D20{
+    background-image: url(../img/d20.png);
+}
+#D8{
+    background-image: url(../img/d8.jpg);
+}
+button{
+    margin: 25px;
+}

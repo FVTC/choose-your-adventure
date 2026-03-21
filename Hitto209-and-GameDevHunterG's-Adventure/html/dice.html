@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Dragon's Dungeon - Dice roller</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>The Dragon's Dungeon</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="dice.html">Dice Roller</a></li>
+                <li><a href="characters.html">Characters</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main> 
+        <button type="button" onclick="rollD20()">Roll a D20</button> <!--Creates a button that simulates rolling a D20-->
+        <button type="button" onclick="rollD8()">Roll a D8</button> <!--Creates a button that simulates rolling a D8--> 
+        <div id="flex-container">
+            <section id="D20">
+                <h2 id="D20-result">20</h2>
+            </section>
+            <section id="D8">
+                <h2 id="D8-result">8</h2>
+            </section>
+        </div>
+    </main>
+    <!-- Connects the website to an external JavaScript file -->
+    <script src="js/dice-roller.js"></script>
+</body>
+</html>
