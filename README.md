@@ -12,6 +12,7 @@ This framework allows you to create interactive adventures using Markdown files.
 ## 🌟 Example Story
 
 [Space Battles](https://github.com/fvtc/choose-your-adventure/blob/master/space-battles/_start-here.md) — A Star Wars-inspired branching adventure.
+[Wireless Connection](https://github.com/fvtc/choose-your-adventure/blob/master/wireless-connection/_start-here.md) — A cyberpunk adventure set in a dystopian future.
 
 ## 📁 Folder Structure
 
