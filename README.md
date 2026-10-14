@@ -9,9 +9,11 @@ This framework allows you to create interactive adventures using Markdown files.
 
 ---
 
-## 🌟 Example Story
+## 🌟 Stories
 
 [Space Battles](https://github.com/fvtc/choose-your-adventure/blob/master/space-battles/_start-here.md) — A Star Wars-inspired branching adventure.
+
+[The Missing Heirloom](https://github.com/EmanIsDead/choose-your-adventure/blob/master/The%20Missing%20Heirloom/_start-here.md) — An Original Branching Adventure.
 
 ## 📁 Folder Structure
 
