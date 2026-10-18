@@ -1,0 +1,3751 @@
+<html style="font-family: Lora;"><head>
+    <title>project</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0">
+    <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAXUlEQVQ4jWNkQANfHl77jy6GDHjktRiR+SgcQpqxGcKETcGRY+sZjhxbj5M/ElxACmBB5uByJj4w8F7AawC+0IeBQeYFYmIBXQ0LIQWEACO6wI7lrXjDwSOyGkUPAKUpOzwONiPPAAAAAElFTkSuQmCC">
+    <!-- styles-->
+    <style id="base-style">:root {
+    /* prevent touch gestures getting stolen by browser */
+    touch-action: none;
+}
+
+/* prevent weird highlights https://stackoverflow.com/questions/21003535/ */
+.no-select {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* hidden elements should be hidden regardless of their display style */
+[hidden] { display: none !important; }
+
+/* default to width/height including padding and border */
+* { box-sizing: border-box; }
+
+/* used dynamically to prevent or cancel smooth transitions */
+.skip-transition { transition: none !important; }
+
+/* make buttons inherit font */ 
+button, select, option, input { font-family: inherit; font-size: inherit; }
+
+/* clickable things should use this cursor imo */
+button, a, details summary { cursor: pointer; }
+
+/* crisp pixelart */
+canvas, img {
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+/* nicer details */
+details summary > * {
+    display: inline;
+}
+
+    </style>
+    <style id="core-style">:root {
+    --selection-color: rgb(106, 90, 205);
+    --group-color: rgba(205, 90, 119, 0.5);
+    --link-color: rgba(113, 205, 90, 0.5);
+
+    --black-text-outline: 1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black;
+
+    --card-color: white;
+}
+
+html, body {
+    width: 100vw; height: 100vh;
+    margin: 0; padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: row;
+}
+
+#frame {
+    position: relative; overflow: hidden; /* clip things */
+    flex: 1;
+
+    cursor: grab;
+
+    background-color: rgb(183, 184, 176);
+}
+
+#scene {
+    position: absolute; transform-origin: 0 0;
+    width: 0; height: 0;
+
+    /* i think this helps streamline the panning by telling the browser that it
+       will be constantly moving
+       https://stackoverflow.com/questions/26907265/css-will-change-how-to-use-it-how-it-works */
+    /* will-change: transform; */
+
+    /* transition: transform .1s linear; */
+}
+
+.icon-bar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    gap: .5em;
+    margin: 0;
+}
+
+.icon-bar > .icon {
+    width: 2em;
+    height: 2em;
+    grid-row: 1;
+
+    padding: 0;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.target {
+    position: absolute;
+    z-index: -1;
+
+    /* tiny curve on corners */
+    border-radius: .5em;
+    background: black;
+
+    opacity: 50%;
+}
+
+.card-root.selected {
+    box-shadow: 0 0 0 8px var(--selection-color);
+}
+
+/* main toolbar */
+#toolbar {
+    position: absolute;
+    right: 0; bottom: 0;
+    
+    font-size: 1.5em;
+    padding: .5em;
+
+    display: flex;
+    flex-direction: row;
+}
+
+/* main toolbar buttons */
+#toolbar > .icon {
+    background: rgb(240, 240, 240);
+    border: 1px solid black;
+    border-radius: 100%;
+    cursor: pointer;
+}
+
+.toolbar-group {
+    border-radius: 100em;
+
+    display: flex;
+    flex-direction: row;
+    gap: .5em;
+    margin: 0;
+    padding: .5em;
+}
+
+.toolbar-group > .icon {
+    background: rgb(240, 240, 240);
+    border: 1px solid black;
+    border-radius: 100%;
+    cursor: pointer;
+}
+
+#svgs > svg {
+    position: absolute;
+    z-index: -3;
+    pointer-events: none;
+    mix-blend-mode: screen;
+}
+
+svg > * {
+    pointer-events: initial;
+}
+
+#svgs > svg.link {
+    stroke-width: 16px;
+    z-index: -2;
+}
+
+svg.link line.selection-flash {
+    stroke-width: 24px;
+}
+
+#left-sidebar {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 400px;
+
+    background: var(--card-color);
+
+    display: flex;
+    flex-direction: column;
+}
+
+.editor-page > h1, h2, p {
+    margin: 0;
+}
+
+.button-row > select, .button-row > input {
+    flex: 1;
+}
+
+.button-row button[data-action="global-editor/card-style/new"] {
+    flex: 0;
+}
+
+.settings-grid > span {
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+
+.settings-grid > input, .settings-grid > select {
+    grid-column-start: 3;
+    grid-column-end: 4;
+}
+
+.settings-grid {
+    display: grid;
+    
+    column-gap: 1em;
+    row-gap: 1em;
+
+    grid-template-columns: auto auto minmax(0, 1fr);
+}
+
+.settings-grid .check {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    place-self: center;
+}
+
+.settings-grid input[type="checkbox"] {
+    transform: scale(1.5);
+}
+
+/* CARDS */
+
+.has-image {
+    align-items: center;
+}
+
+.has-image .card-text {
+    background-repeat: no-repeat;
+
+    color: white;
+    text-align: center;
+    text-shadow: var(--black-text-outline);
+}
+
+.card-root {
+    position: absolute;
+
+    border-radius: 8px;
+    box-shadow: 0 3px 0 var(--card-edge-color, black);
+}
+
+.card-body {
+    position: relative; overflow: hidden; /* clipping */
+    width: 100%; height: 100%; margin: 0;
+    display: flex;
+    
+    background-color: var(--card-color, white);
+    border-radius: inherit;
+    background-size: cover;
+    background-position: center;
+}
+
+.card-text {
+    width: 100%;
+    padding: 16px;
+
+    color: var(--text-color, black);
+    font-size: var(--text-size, initial);
+    font-family: var(--text-font, inherit);
+    text-align: var(--text-align, inherit);
+}
+
+.card-text > h3 {
+    margin: 0;
+    margin-bottom: .5em;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.card-icon-bar {
+    position: absolute;
+    left: 50%; bottom: 0;
+    transform: translate(-50%, 50%);
+
+    display: flex;
+    justify-content: space-evenly;
+    
+    padding: 1em;
+    margin: 0;
+    width: 100%;
+
+    font-size: 1rem;
+
+    pointer-events: none;
+}
+
+.card-icon-bar > a {
+    width: 2em;
+    height: 2em;
+
+    padding: 0;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+
+    pointer-events: initial;
+
+    transition: transform .1s ease-in-out;
+}
+
+.card-icon-bar > *:hover  { transform: scale(1.5); }
+.card-icon-bar > *:active { transform: scale(2);   }
+/* don't animate cosmetic card icons */
+.card-icon-bar > *.cosmetic { cursor: initial; transform: unset; }
+/* don't respond to blank card icons */
+.card-icon-bar > *.blank { pointer-events: none; transform: unset; }
+
+
+#sidebar-toggle {
+    position: absolute;
+    left: 0; bottom: 0;
+    font-size: 1.5em;
+    padding: 1em;
+}
+
+    </style>
+    <style id="editor-style">:root {
+    font-family: sans-serif;
+    font-size: 1.1em;
+}
+
+.selection-flash {
+    animation-name: selection-flash;
+    animation-direction: alternate;
+    animation-duration: .75s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes selection-flash {
+    0% {
+        fill: black;
+        stroke: black;
+        border-color: black;
+    }
+
+    100% {
+        fill: white;
+        stroke: white;
+        border-color: white;
+    }
+}
+
+.resize-handle {
+    position: absolute;
+    width: 32px; height: 32px;
+    right: -1px; bottom: -1px;
+
+    opacity: 50%;
+    display: none;
+}
+
+.resize-handle > polygon {
+    cursor: se-resize;
+}
+
+.selected .resize-handle {
+    display: unset;
+}
+
+body:not([data-player]) .card-root:hover .resize-handle {
+    display: unset;
+}
+
+.target {
+    transition: transform .1s, width .1s, height .1s;
+}
+
+.card-selection {
+    position: absolute;
+    left: -16px; right: -16px; top: -16px; bottom: -16px;
+}
+
+.icon.disabled {
+    cursor: not-allowed;
+    opacity: .5;
+}
+
+.editor-blocker {
+    position: absolute;
+    width: 100%; height: 100%;
+    margin: 0; padding: 0;
+
+    background-color: rgba(0, 0, 0, 25%);
+}
+
+.editor-panel {
+    position: absolute;
+    left: 50%; bottom: 0;
+    transform: translate(-50%, 0);
+
+    background: var(--card-color);
+    pointer-events: initial;
+    cursor: initial;
+
+    width: 400px;
+    max-width: 100%;
+    height: 300px;
+    max-height: 50%;
+
+    display: flex;
+    flex-direction: column;
+
+    left: 0; top: 0; bottom: 0;
+    width: 420px;
+    height: 100%;
+    max-height: none;
+    max-width: none;
+    transform: none;
+}
+
+#content-input {
+    flex: 1;
+}
+
+.full {
+    position: absolute;
+    width: 100%; height: 100%;
+    margin: 0; padding: 0;
+}
+
+/* generic tabbed pages styles */
+.tab-bar {
+    display: grid;
+    grid-auto-flow: column;
+    color: white;
+    background:black;
+}
+
+.tab-bar > * {
+    padding: 1em;
+    text-align: center;
+}
+
+.tab-bar > button {
+    border: none;
+    background: inherit;
+    color: inherit;
+    text-transform: uppercase;
+}
+
+.tab-bar > *.active {
+    color: black;
+    background: lightblue;
+}
+
+.tab-page {
+    margin: 0;
+    padding: 2em;
+    overflow: auto;
+
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+/* end of tabbed pages styles */
+
+.editor-page {
+    padding: 1em;
+    height: 100%;
+    display: flex;
+
+    flex-direction: column;
+    gap: 1em;
+
+    overflow: auto;
+}
+
+/* editor icons page styles */
+#card-editor-icons {
+    display: grid;
+
+    grid-template-columns: 3em auto;
+    grid-template-rows: repeat(4, 1fr);
+
+    column-gap: 1em;
+    row-gap: 1em;
+}
+
+.icon-select {
+    min-width: 3em;
+    text-align: center;
+    font-size: 1em;
+
+    grid-column: 1;
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+.icon-action {
+    font-size: 1em;
+    font-family: monospace;
+
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+/* end of editor icons page styles */
+
+textarea {
+    flex: 1;
+    min-height: 10em;
+}
+
+.button-row {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 1em;
+}
+
+.button-row > button {
+    flex: 1;
+    white-space: nowrap;
+}
+
+.toolbar-group[data-path="global"] {
+    background: rgb(255 255 255 / 50%);
+}
+
+.toolbar-group[data-path="selection"] {
+    background: var(--selection-color);
+}
+
+.toolbar-group[data-path="group"] {
+    background: var(--group-color);
+}
+
+.toolbar-group[data-path="link"] {
+    background: var(--link-color);
+}
+
+.toolbar-group[data-path="picker"] {
+    background: var(--link-color);
+}
+
+.toolbar-group[data-path="picker"] > span {
+    font-size: .75em;
+    white-space: nowrap;
+}
+
+.button-list {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+
+[data-path="card-editor/styles"] {
+    flex: 1;
+    min-height: 10em;
+}
+
+.card-style-settings-row {
+    display: flex;
+}
+
+#card-style-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+#card-style-fields > h2 {
+    margin: 0;
+}
+
+body[data-player] #toolbar {
+    display: none;
+}
+
+.button-column {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1em;
+}
+
+/* sidebar stuff */
+.sidebar-page {
+    height: 100%;
+    overflow: auto;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    padding: 1em;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+
+    background: lightblue;
+}
+
+.sidebar-panel {
+    height: 100%;
+    overflow: auto;
+
+    padding: 1em;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.sidebar-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+
+.button-row .shrink {
+    flex: 0;
+}
+
+    </style>
+    <style id="card-styles">.style-STYLE-HEADING { --card-color: #00000040; --text-size: 30px; --text-align: center; }
+.style-STYLE-HEADING .card-body { align-items: center; font-weight: bold; }
+.style-STYLE-HEADING.card-root { --card-edge-color: rgba(0, 0, 0, 25%); }
+.style-STYLE-GRID {  }
+.style-STYLE-GRID .card-body { line-height: 1.35em; background-image: linear-gradient(gainsboro 1px, transparent 1px), linear-gradient(90deg, gainsboro 1px, transparent 1px); background-size: 1.3em 1.3em; background-position: 0.75em 0.75em; }
+.style-STYLE-TERMINAL { --card-color: #000000FF; --text-font: monospace; --text-color: #00ff00ff; }
+.style-EeMLC4dJM4-iD3bhd2BWk { --card-color: #ffffff7c; --text-color: #7d7d7dff; }
+.style-yrKZvizTDGthzyGX_AA-X { --card-color: #ffffff76; --text-size: 17px; }
+.style-1HQnPB8fc0zpeLqCCGokQ { --card-color: #e5efd2ff; }
+.style-CyZclJHl2fVSpLw53gn1Q { --card-color: #d2deefff; }
+.style-vc_VZePmvF5KufvjyQGuX { --card-color: #efd6d2ff; }</style>
+    <!-- scripts-->
+    <script id="database.js">/** 
+ * @template T
+ * @param {IDBRequest<T>} request 
+ * @returns {Promise<T>}
+ */
+function promisfyRequest(request) {
+    return new Promise((resolve, reject) => {
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+/** 
+ * @param {IDBTransaction} transaction 
+ * @returns {Promise}
+ */
+ function promisfyTransaction(transaction) {
+    return new Promise((resolve, reject) => {
+        transaction.oncomplete = () => resolve();
+        transaction.onabort = () => reject(transaction.error);
+        transaction.onerror = () => reject(transaction.error);
+    });
+}
+
+async function openDatabase() {
+    const request = indexedDB.open("domino2");
+    request.addEventListener("upgradeneeded", () => {
+        request.result.createObjectStore("projects");
+        request.result.createObjectStore("projects-meta");
+    });
+    return promisfyRequest(request);
+}
+
+async function projectsStores(mode) {
+    const db = await openDatabase();
+    const transaction = db.transaction(["projects", "projects-meta"], mode);
+    const projects = transaction.objectStore("projects");
+    const meta = transaction.objectStore("projects-meta");
+    return { transaction, projects, meta };
+}
+
+/**
+ * @returns {Promise<DominoDataSaveMetadata[]>}
+ */
+async function listProjects() {
+    const stores = await projectsStores("readonly");
+    return promisfyRequest(stores.meta.getAll());
+}
+
+/**
+ * @param {DominoDataProject} projectData 
+ * @returns {Promise}
+ */
+async function saveProject(projectData, key) {
+    /** @type {DominoDataSaveMetadata} */
+    const meta = {
+        id: projectData.details.id,
+        title: projectData.details.title,
+        date: (new Date()).toISOString(),
+    }
+
+    const stores = await projectsStores("readwrite");
+    stores.projects.put(projectData, key);
+    stores.meta.put(meta, key);
+    return promisfyTransaction(stores.transaction);
+}
+
+/**
+ * @param {string} key
+ * @returns {Promise<DominoDataProject>}
+ */
+async function loadProject(key) {
+    const stores = await projectsStores("readonly");
+    return promisfyRequest(stores.projects.get(key));
+}
+
+/**
+ * @param {string} key
+ */
+ async function deleteProject(key) {
+    const stores = await projectsStores("readwrite");
+    stores.projects.delete(key);
+    stores.meta.delete(key);
+    return promisfyTransaction(stores.transaction);
+}
+
+    </script>
+    <script id="utility.js">'use strict'
+
+/**
+ * @typedef {Object} Vector2
+ * @property {number} x
+ * @property {number} y
+ */
+
+/**
+ * @typedef {Object} Rect
+ * @property {number} x
+ * @property {number} y
+ * @property {number} width
+ * @property {number} height
+ */
+
+/**
+ * @param {string} query 
+ * @param {ParentNode} element 
+ * @returns {HTMLElement}
+ */
+const ONE = (query, element = undefined) => (element || document).querySelector(query);
+/**
+ * @param {string} query 
+ * @param {HTMLElement | Document} element 
+ * @returns {HTMLElement[]}
+ */
+const ALL = (query, element = undefined) => Array.from((element || document).querySelectorAll(query));
+
+/**
+ * @template T
+ * @param {T} object
+ * @returns {T}
+ */
+const COPY = (object) => JSON.parse(JSON.stringify(object));
+
+// async equivalent of Function constructor
+const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor
+
+/**
+ * @template T
+ * @param {HTMLSelectElement} element 
+ * @param {T[]} data 
+ * @param {(data: T) => HTMLOptionElement} renderer 
+ */
+ function refreshDropdown(element, data, renderer) {
+    const value = element.value;
+    const options = data.map(renderer);
+    element.replaceChildren(...options);
+    element.value = value;
+}
+
+/**
+ * @param {MouseEvent | Touch} event 
+ * @param {HTMLElement} element 
+ */
+function eventToElementPixel(event, element) {
+    const rect = element.getBoundingClientRect();
+    return [event.clientX - rect.x, event.clientY - rect.y];
+}
+
+/** @param {Event} event */
+function killEvent(event) {
+    event.stopPropagation();
+    event.preventDefault();
+}
+
+/**
+ * @param {string} src
+ * @returns {Promise<HTMLImageElement>} image
+ */
+async function loadImage(src) {
+    return new Promise((resolve, reject) => {
+        const image = document.createElement("img");
+        image.addEventListener("load", () => resolve(image));
+        image.src = src;
+    });
+}
+
+/** @param {HTMLImageElement} image */
+function imageToRendering2D(image) {
+    const rendering = createRendering2D(image.naturalWidth, image.naturalHeight);
+    rendering.drawImage(image, 0, 0);
+    return rendering;
+}
+
+/**
+ * @template {any} T
+ * @param {T[]} array 
+ * @param {T} value
+ * @returns {boolean}
+ */
+function arrayDiscard(array, value) {
+    const index = array.indexOf(value);
+    if (index >= 0) array.splice(index, 1);
+    return index >= 0;
+}
+
+/**
+ * @template {keyof HTMLElementTagNameMap} K
+ * @param {K} tagName 
+ * @param {*} attributes 
+ * @param  {...(Node | string)} children 
+ * @returns {HTMLElementTagNameMap[K]}
+ */
+function html(tagName, attributes = {}, ...children) {
+    const element = /** @type {HTMLElementTagNameMap[K]} */ (document.createElement(tagName)); 
+    Object.entries(attributes).forEach(([name, value]) => element.setAttribute(name, value));
+    children.forEach((child) => element.append(child));
+    return element;
+}
+
+/**
+ * @template {keyof SVGElementTagNameMap} K
+ * @param {K} tagName 
+ * @param {*} attributes 
+ * @param  {...SVGElement} children 
+ * @returns {SVGElementTagNameMap[K]}
+ */
+function svg(tagName, attributes = {}, ...children) {
+    const element = document.createElementNS("http://www.w3.org/2000/svg", tagName);
+    Object.entries(attributes).forEach(([name, value]) => element.setAttributeNS(null, name, value));
+    children.forEach((child) => element.append(child));
+    return element;
+}
+
+// from https://github.com/ai/nanoid/blob/master/non-secure/index.js
+const urlAlphabet = 'ModuleSymbhasOwnPr-0123456789ABCDEFGHNRVfgctiUvz_KqYTJkLxpZXIjQW';
+function nanoid(size = 21) {
+    let id = '';
+    let i = size;
+    while (i--) id += urlAlphabet[(Math.random() * 64) | 0];
+    return id
+}
+
+/**
+ * @param {File} file 
+ * @return {Promise<string>}
+ */
+async function textFromFile(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = reject;
+        reader.onload = () => resolve(/** @type {string} */ (reader.result));
+        reader.readAsText(file); 
+    });
+}
+
+/**
+ * @param {File} file 
+ * @return {Promise<string>}
+ */
+async function dataURLFromFile(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = reject;
+        reader.onload = () => resolve(/** @type {string} */ (reader.result));
+        reader.readAsDataURL(file); 
+    });
+}
+
+/**
+ * @param {string} source
+ */
+async function htmlFromText(source) {
+    const template = document.createElement('template');
+    template.innerHTML = source;
+    return template.content;
+}
+
+/**
+ * @param {string} text 
+ */
+function textToBlob(text, type = "text/plain") {
+    return new Blob([text], { type });
+}
+
+/**
+ * @param {string} accept 
+ * @param {boolean} multiple 
+ * @returns {Promise<File[]>}
+ */
+async function pickFiles(accept = "*", multiple = false) {
+    return new Promise((resolve) => {
+        const fileInput = html("input", { type: "file", accept, multiple });
+        fileInput.addEventListener("change", () => resolve(Array.from(fileInput.files)));
+        fileInput.click();
+    });
+}
+
+function translationMatrix(translation) {
+    const matrix = new DOMMatrix();
+    matrix.e = translation.x;
+    matrix.f = translation.y;
+    return matrix;
+}
+
+/** @param {DOMMatrix} matrix */
+function getMatrixTranslation(matrix) {
+    return { x: matrix.e, y: matrix.f };
+}
+
+/** @param {DOMMatrix} matrix */
+function getMatrixScale(matrix) {
+    return { 
+        x: Math.sqrt(matrix.a*matrix.a + matrix.c*matrix.c),
+        y: Math.sqrt(matrix.b*matrix.b + matrix.d*matrix.d),
+    };
+}
+
+/**
+ * @param {number} value 
+ * @param {number} min 
+ * @param {number} max 
+ */
+function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+}
+
+/**
+ * @param {Rect} rect 
+ * @param {number} padding 
+ */
+function padRect(rect, padding) {
+    rect.x -= padding;
+    rect.y -= padding;
+    rect.width += padding * 2;
+    rect.height += padding * 2;
+    return rect;
+}
+
+/**
+ * @param {Rect} rect 
+ */
+function getRectCenter(rect) {
+    return {
+        x: rect.x + rect.width * .5,
+        y: rect.y + rect.height * .5,
+    }
+}
+
+/**
+ * @param {Rect} rect
+ * @param {{ x: number, y: number }} point 
+ */
+function rectContainsPoint(rect, point) {
+    return point.x >= rect.x
+        && point.y >= rect.y
+        && point.x <  rect.x + rect.width
+        && point.y <  rect.y + rect.height;
+}
+
+/**
+ * @param {Rect} a 
+ * @param {Rect} b 
+ */
+function rectsOverlap(a, b) {
+    const outside = a.x + a.width  > b.x
+                 || a.y + a.height > b.y
+                 || a.x > b.width  + b.x
+                 || a.y > b.height + b.y;
+
+    return !outside;
+}
+
+/**
+ * @param {Rect[]} rects
+ * @param {Rect} fallback
+ * @returns {Rect}
+ */
+function boundRects(rects, fallback = { x: 0, y: 0, width: 0, height: 0 }) {
+    const bounds = DOMRect.fromRect(rects[0] || fallback);
+    rects.forEach((rect) => {
+        const { x, y, width, height } = rect;
+        let [top, left, bottom, right] = [y, x, y + height, x + width];
+        left = Math.min(bounds.left, left);
+        top = Math.min(bounds.top, top);
+        right = Math.max(bounds.right, right);
+        bottom = Math.max(bounds.bottom, bottom);
+        bounds.x = left;
+        bounds.y = top;
+        bounds.width = right - left;
+        bounds.height = bottom - top;
+    });
+    return bounds;
+}
+
+/**
+ * @param {any} item 
+ * @param {any[]} array 
+ */
+function removeItemFromArray(item, array) {
+    const index = array.indexOf(item);
+    array.splice(index, 1);
+}
+
+/**
+ * 
+ * @param {string} original 
+ * @param {string} insert 
+ * @param {number} start 
+ * @param {number} end 
+ */
+function insertText(original, insert, start, end) {
+    const left = original.substring(0, start);
+    const right = original.substring(end);
+    return `${left}${insert}${right}`;
+}
+
+/**
+ * @param {number} min 
+ * @param {number} max 
+ */
+function range(min, max) {
+    return Array.from(new Array(max-min+1), (x, i) => i + min);
+}
+
+/**
+ * @param {number} min 
+ * @param {number} max 
+ */
+function randomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+/** @param {number} milliseconds */
+function sleep(milliseconds) {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
+}
+
+class EventEmitter {
+    constructor() {
+        this.listeners = {};
+    }
+
+    on(event, listener) {
+        if (this.listeners[event] === undefined)
+            this.listeners[event] = [];
+        this.listeners[event].push(listener);
+        return () => this.off(event, listener);
+    }
+
+    off(event, listener) {
+        const listeners = this.listeners[event] || [];
+        const index = listeners.indexOf(listener);
+        if (index !== -1)
+            this.listeners[event].splice(index, 1);
+    }
+
+    emit(event, ...args) {
+        const listeners = this.listeners[event] || [];
+        [...listeners].forEach((listener) => listener(...args));
+    }
+
+    once(event, listener) {
+        const remove = this.on(event, (...args) => {
+            remove();
+            listener(...args);
+        });
+        return remove;
+    }
+
+    async wait(event, timeout = undefined) {
+        return new Promise((resolve, reject) => {
+            if (timeout) setTimeout(reject, timeout);
+            this.once(event, resolve);
+        });
+    }
+};
+
+/**
+ * @template {keyof WindowEventMap} K
+ * @param {Window | Document | Element} element 
+ * @param {K} type 
+ * @param {(event: WindowEventMap[K]) => any} listener
+ */
+function listen(element, type, listener) {
+    element.addEventListener(type, listener);
+    return () => element.removeEventListener(type, listener);
+}
+
+    </script>
+    <script id="htmlui.js">/**
+ * @param {string} path 
+ * @returns {[string, string]}
+ */
+function pathToRootLeaf(path) {
+    const parts = path.split('/');
+    const root = parts.slice(0, -1).join('/');
+    const leaf = parts.slice(-1)[0];
+    return [root, leaf];
+}
+
+const toggleStates = new Map();
+const actionHandlers = new Map();
+const pathToElement = new Map();
+
+/**
+ * @template {keyof HTMLElementTagNameMap} K
+ * @param {*} path 
+ * @param {K} tagName
+ * @returns {HTMLElementTagNameMap[K]}
+ */
+function elementByPath(path, tagName) {
+    /** @type {HTMLElementTagNameMap[K]} */
+    const element = pathToElement.get(path);
+    if (element === undefined)
+        throw Error(`No element at ${path}`);
+    if (element.tagName.toLowerCase() !== tagName)
+        throw Error(`Element at ${path} is ${element.tagName} not ${tagName}`);
+    return element;
+}
+
+function setActionHandler(action, callback) {
+    actionHandlers.set(action, callback);
+}
+
+function invokeAction(action) {
+    const handler = actionHandlers.get(action);
+    if (handler) handler();
+}
+
+function switchTab(path) {
+    elementByPath(`toggle:${path}`, "button").click();
+}
+
+function initui() {
+    const toggles = ALL("[data-tab-toggle]");
+    const bodies = ALL("[data-tab-body]");
+    const buttons = ALL("[data-action]");
+
+    const paths = ALL("[data-path]");
+    paths.forEach((element) => {
+        const path = element.getAttribute("data-path");
+        pathToElement.set(path, element);
+    });
+
+    buttons.forEach((element) => {
+        const action = element.getAttribute("data-action");
+
+        element.addEventListener("click", (event) => {
+            killEvent(event);
+            invokeAction(action);
+        });
+    })
+
+    function setGroupActiveTab(group, tab) {
+        toggleStates.set(group, tab);
+        toggles.forEach((element) => {
+            const [group_, tab_] = pathToRootLeaf(element.getAttribute("data-tab-toggle"));
+            if (group_ === group) element.classList.toggle("active", tab_ === tab);
+        });
+        bodies.forEach((element) => {
+            const [group_, tab_] = pathToRootLeaf(element.getAttribute("data-tab-body"));
+            if (group_ === group) element.hidden = (tab_ !== tab);
+        });
+
+        invokeAction(`hide:${group}`);
+        invokeAction(`show:${group}/${tab}`);
+    }
+
+    toggles.forEach((element) => {
+        const path = element.getAttribute("data-tab-toggle");
+        pathToElement.set("toggle:" + path, element);
+        const [group, tab] = pathToRootLeaf(element.getAttribute("data-tab-toggle"));
+        element.addEventListener('click', (event) => {
+            killEvent(event);
+            setGroupActiveTab(group, tab);
+        });
+    });
+
+    bodies.forEach((element) => {
+        element.hidden = true;
+    });
+
+    ALL("[data-tab-default]").forEach((element) => element.click());
+    
+    const clicks = ['pointerdown', 'click', 'wheel', 'dblclick'];
+    ALL("[data-block-clicks]").forEach((element) => {
+        for (let name of clicks) {
+            element.addEventListener(name, (event) => event.stopPropagation());
+        }
+    });
+}
+
+    </script>
+    <script id="domino.js">/**
+ * @typedef {Object} DominoDataCardStyle
+ * @property {string} id
+ * @property {string} name
+ * @property {Partial<{
+ *   "custom-css": string,
+ *   "text-font": string,
+ *   "text-color": string,
+ *   "text-size": string,
+ *   "text-center": string,
+ *   "card-color": string,
+ * }>} properties
+ */
+
+/**
+ * @typedef {Object} DominoDataCardIcon
+ * @property {string} icon
+ * @property {string} action
+ */
+
+/**
+ * @typedef {Object} DominoDataCard
+ * @property {string} id
+ * @property {Vector2} position
+ * @property {Vector2} size
+ * @property {string} text
+ * @property {DominoDataCardIcon[]} icons
+ * @property {string?} image
+ * @property {string?} alttext
+ * @property {string?} style
+ */
+
+/** 
+ * @typedef {Object} DominoDataGroup
+ * @property {string[]} cards
+ * @property {string} color
+ */
+
+/**
+ * @typedef {Object} DominoDataLink
+ * @property {string} cardA
+ * @property {string} cardB
+ * @property {string} color
+ */
+
+/**
+ * @typedef {Object} DominoDataProjectDetails
+ * @property {string} id
+ * @property {string} name
+ * @property {string} title
+ * @property {string} focus
+ */
+
+/**
+ * @typedef {Object} DominoDataSaveMetadata
+ * @property {string} id
+ * @property {string} title
+ * @property {string} date
+ */
+
+/**
+ * @typedef {Partial<{
+ *   "custom-css": string,
+ *   "background-color": string,
+ * }>} DominoDataBoardStyle
+ */
+
+/**
+ * @typedef {Object} DominoDataProject
+ * @property {DominoDataProjectDetails} details
+ * @property {DominoDataCard[]} cards
+ * @property {DominoDataGroup[]} groups
+ * @property {DominoDataLink[]} links
+ * @property {DominoDataCardStyle[]} cardStyles
+ * @property {DominoDataBoardStyle} boardStyle
+ */
+
+    </script>
+    <script id="test.js">/** @type {Set<DominoDataCard>} */
+const selectedCards = new Set();
+/** @type {DominoDataGroup[]} */
+const selectedGroups = [];
+/** @type {DominoDataLink[]} */
+const selectedLinks = [];
+/** @type {DominoDataCard} */
+let linking;
+/** @type {LinkEditor} */
+let linkEditor;
+/** @type {GroupEditor} */
+let groupEditor;
+/** @type {CardEditor} */
+let cardEditor;
+/** @type {DominoBoardView} */
+let boardView;
+/** @type {DominoProjectManager} */
+let dataManager;
+
+/** @type {CardStyleEditor} */
+let cardStyleEditor;
+
+async function test() {
+    dataManager = new DominoProjectManager();
+    boardView = new DominoBoardView();
+    cardEditor = new CardEditor();
+    linkEditor = new LinkEditor();
+    groupEditor = new GroupEditor();
+    cardStyleEditor = new CardStyleEditor();
+
+    listen(scene.viewport, "dblclick", (event) => {
+        if (!boardView.editable) return;
+
+        killEvent(event);    
+        const transform = scene.mouseEventToSceneTransform(event);
+        transform.e -= cellWidth/2;
+        transform.f -= cellHeight/2;
+        gridSnap(transform);
+        const position = getMatrixTranslation(transform);
+
+        const card = {
+            id: nanoid(),
+            position,
+            size: { x: 2, y: 2 },
+            text: "new card :)",
+            icons: [],
+        }
+
+        dataManager.makeCheckpoint();
+        insertCard(scene, card);
+        deselectAll();
+        selectCard(card);
+        invokeAction("global-editor/open");
+        switchTab("sidebar/selection");
+    });
+
+    setActionHandler("global/undo", () => dataManager.undo());
+    setActionHandler("global/redo", () => dataManager.redo());
+
+    setActionHandler("global/view-saves", () => {
+        switchTab("sidebar/board");
+        cardStyleEditor.open();
+        ONE("#saved-boards").open = true;
+    });
+
+    setActionHandler("project/reset", () => dataManager.reset(JSON.parse(ONE("#project-data").innerHTML)));
+
+    setActionHandler("selection/copy-id", () => {
+        const ids = Array.from(selectedCards).map((card) => card.id);
+        navigator.clipboard.writeText('#' + ids.join(","));
+    });
+    setActionHandler("selection/group", groupSelection);
+    setActionHandler("selection/link", beginLink);
+    setActionHandler("selection/cancel", deselectCards);
+    setActionHandler("selection/center", centerSelection);
+    setActionHandler("selection/delete", () => {
+        dataManager.makeCheckpoint();
+        Array.from(selectedCards).forEach((card) => deleteCard(card));
+    });
+
+    setActionHandler("group/delete", deleteSelectedGroup);
+    setActionHandler("group/select", selectGroupCards);
+
+    setActionHandler("link/delete", deleteSelectedLink);
+    setActionHandler("link/select", selectLinkCards);
+
+    setActionHandler("card-editor/close", closeEditor);
+
+    setActionHandler("picker/cancel", () => {
+        linking = undefined;
+        updateToolbar();
+    });
+
+    setActionHandler("global/center-focus", () => {
+        const data = boardView.projectData;
+        if (data.details.focus) centerCards(getCardsByIds(data.details.focus.slice(1).split(",")));
+    });
+    
+    // image pasting
+    window.addEventListener("paste", (event) => cardEditor.paste(event));
+
+    // hotkeys
+    document.addEventListener("keydown", (event) => {
+        const targetTag = event.target.tagName.toLowerCase();
+        const textedit = targetTag === "input" || targetTag === "textarea";
+
+        if (event.ctrlKey && event.key === "s") {
+            invokeAction("project/save");
+        } else if (!textedit && event.key === "Escape") {
+            deselectAll();
+        } else if (!textedit && event.key === "Delete") {
+            if (selectedCards.size > 0) invokeAction("selection/delete");
+            if (selectedGroups.length > 0) invokeAction("group/delete");
+            if (selectedLinks.length > 0) invokeAction("link/delete");
+        } else if (!textedit && event.ctrlKey && event.key == "z") {
+            dataManager.undo();
+        } else if (!textedit && event.ctrlKey && event.key == "y") {
+            dataManager.redo();
+        } else {
+            return;
+        }
+
+        killEvent(event);
+    });
+}
+
+/** @param {DominoDataGroup} group */
+function getGroupCards(group) {
+    const cards = new Set(group.cards);
+    return boardView.projectData.cards.filter((card) => cards.has(card.id));
+}
+
+/** @param {string[]} ids */
+function getCardsByIds(ids) {
+    const cards = new Set(ids);
+    return boardView.projectData.cards.filter((card) => cards.has(card.id));
+}
+
+function updateToolbar() {
+    const selection = selectedCards.size > 0;
+    const selectedGroup = selectedGroups.length > 0;
+    const selectedLink = selectedLinks.length > 0;
+
+    elementByPath("picker", "div").hidden = !linking;
+
+    if (selection) switchTab("sidebar/selection/cards");
+    else if (selectedGroup) switchTab("sidebar/selection/group");
+    else if (selectedLink) switchTab("sidebar/selection/link");
+    else switchTab("sidebar/selection/none");
+
+    // selections
+    const active = selectedGroups.length > 0 ? new Set(getGroupCards(selectedGroups[0])) : selectedCards;
+    boardView.cardToView.forEach((view, card) => view.setSelected(active.has(card)));
+
+    ONE("#undo").classList.toggle("disabled", !dataManager.canUndo);
+    ONE("#redo").classList.toggle("disabled", !dataManager.canRedo);
+}
+
+/** 
+ * @param {PanningScene} scene
+ * @param {DominoDataCard} card
+ */
+function insertCard(scene, card) {
+    boardView.projectData.cards.push(card);
+    const view = new DominoCardView(scene);
+    view.setCard(card);
+    boardView.cardToView.set(card, view);
+    return view;
+}
+
+/** @param {DominoDataCard} card */
+function deleteCard(card) {
+    arrayDiscard(boardView.projectData.cards, card);
+
+    Array.from(boardView.projectData.groups).forEach((group) => {
+        if (arrayDiscard(group.cards, card.id)) refreshGroup(group);
+        if (group.cards.length === 0) deleteGroup(group);
+    });
+    Array.from(boardView.projectData.links).forEach((link) => {
+        if (link.cardA === card.id || link.cardB === card.id) {
+            deleteLink(link);
+        }
+    });
+
+    deselectCard(card);
+    boardView.cardToView.get(card).rootElement.remove();
+    boardView.cardToView.delete(card);
+}
+
+function deselectAll() {
+    deselectCards();
+    deselectGroup();
+    deselectLink();
+    updateToolbar();
+}
+
+function deselectCards() {
+    selectedCards.forEach((card) => boardView.cardToView.get(card).setSelected(false));
+    selectedCards.clear();
+
+    updateToolbar();
+    cardEditor.close();
+}
+
+function deselectGroup() {
+    selectedGroups.forEach((group) => boardView.groupToView.get(group).setHighlight(false));
+    selectedGroups.length = 0;
+    updateToolbar();
+    groupEditor.close();
+}
+
+function selectGroupCards() {
+    getCardsByIds(selectedGroups[0].cards).forEach(selectCard);
+}
+
+function deleteSelectedGroup() {
+    deleteGroup(selectedGroups.shift());
+    deselectGroup();
+}
+
+function deleteGroup(group) {
+    arrayDiscard(boardView.projectData.groups, group);
+    boardView.groupToView.get(group).dispose();
+    boardView.groupToView.delete(group);
+}
+
+function deselectLink() {
+    selectedLinks.forEach((link) => boardView.linkToView.get(link).setHighlight(false));
+    selectedLinks.length = 0;
+    updateToolbar();
+    linkEditor.close();
+}
+
+function selectLinkCards() {
+    const cards = [selectedLinks[0].cardA, selectedLinks[0].cardB];
+    getCardsByIds(cards).forEach(selectCard);
+}
+
+function deleteSelectedLink() {
+    dataManager.makeCheckpoint();
+    deleteLink(selectedLinks.shift());
+    deselectLink();
+}
+
+function deleteLink(link) {
+    arrayDiscard(boardView.projectData.links, link);
+    boardView.linkToView.get(link).dispose();
+    boardView.linkToView.delete(link);
+}
+
+function closeEditor() {
+    cardEditor.close();
+}
+
+function selectCard(card) {
+    if (selectedCards.size === 0) {
+        switchTab("sidebar/selection");
+    }
+
+    selectedCards.add(card);
+    boardView.cardToView.get(card).setSelected(true);
+
+    deselectGroup();
+    deselectLink();
+    updateToolbar();
+
+    cardEditor.openMany(Array.from(selectedCards));
+}
+
+function deselectCard(card) {
+    selectedCards.delete(card);
+    boardView.cardToView.get(card).setSelected(false);
+
+    updateToolbar();
+    cardEditor.openMany(Array.from(selectedCards));
+}
+
+function beginLink() {
+    if (selectedCards.size !== 1) return;
+    linking = Array.from(selectedCards)[0];
+    updateToolbar();
+}
+
+/** @param {DominoDataCard} card */
+function selectCardToggle(card) {
+    if (linking) {
+        const link = { cardA: linking.id, cardB: card.id, color: 'black' };
+        dataManager.makeCheckpoint();
+        boardView.projectData.links.push(link);
+        linking = undefined;
+        refreshLink(link);
+        selectLinks([link]);
+    } else if (selectedGroups.length > 0) {
+        const group = selectedGroups[0];
+        if (!arrayDiscard(group.cards, card.id)) group.cards.push(card.id);
+        refreshGroup(group);
+        updateToolbar();
+    } else {
+        if (selectedCards.has(card)) deselectCard(card);
+        else selectCard(card);
+    }
+}
+
+function deselectAll() {
+    deselectCards();
+    deselectGroup();
+    deselectLink();
+}
+
+function cycleGroup() {
+    const current = selectedGroups.shift();
+    selectedGroups.push(current);
+    boardView.groupToView.get(current).setHighlight(false);
+    boardView.groupToView.get(selectedGroups[0]).setHighlight(true);
+    updateToolbar();
+}
+
+/** @param {DominoDataGroup[]} groups */
+function selectGroups(groups) {
+    if (selectedGroups.length === 0) switchTab("sidebar/selection");
+
+    const combined = new Set([...groups, ...selectedGroups]);
+    const same = combined.size === selectedGroups.length && combined.size === groups.length;
+
+    if (same) {
+        cycleGroup();
+    } else {
+        const prev = selectedGroups[0];
+
+        deselectAll();
+        selectedGroups.push(...groups);
+        boardView.groupToView.get(selectedGroups[0]).setHighlight(true);
+        updateToolbar();
+        
+        if (prev === selectedGroups[0]) cycleGroup();
+    }
+
+    groupEditor.openGroups([selectedGroups[0]]);
+}
+
+function cycleLink() {
+    const current = selectedLinks.shift();
+    selectedLinks.push(current);
+    boardView.linkToView.get(current).setHighlight(false);
+    boardView.linkToView.get(selectedLinks[0]).setHighlight(true);
+    updateToolbar();
+}
+
+/** @param {DominoDataLink[]} links */
+function selectLinks(links) {
+    if (selectedLinks.length === 0) switchTab("sidebar/selection");
+
+    const combined = new Set([...links, ...selectedLinks]);
+    const same = combined.size === selectedLinks.length && combined.size === links.length;
+
+    if (same) {
+        cycleLink();
+    } else {
+        const prev = selectedLinks[0];
+
+        deselectAll();
+        selectedLinks.push(...links);
+        boardView.linkToView.get(selectedLinks[0]).setHighlight(true);
+        updateToolbar();
+        
+        if (prev === selectedLinks[0]) cycleLink();
+    }
+
+    linkEditor.openLinks([selectedLinks[0]]);
+}
+
+function centerSelection() {
+    centerCards(Array.from(selectedCards));
+}
+
+function centerCards(cards) {
+    scene.locked = true;
+    animateElementTransform(scene.container, .2).then(() => scene.locked = false);
+    const rect = boundCards(cards);
+    padRect(rect, 64);
+    scene.frameRect(rect, .25, 1);
+
+    //if (cards.length === 1) window.location.replace("#" + cards[0].id);
+}
+
+function groupSelection() {
+    dataManager.makeCheckpoint();
+    const cards = Array.from(selectedCards).map((card) => card.id);
+    const color = `rgb(${randomInt(0, 255)} ${randomInt(0, 255)} ${randomInt(0, 255)})`;
+    const group = { cards, color };
+    boardView.projectData.groups.push(group);
+    refreshGroup(group);
+    selectGroups([group]);
+}
+
+/** @type {Map<SVGElement, DominoDataGroup>} */
+const svgToGroup = new Map();
+/** @type {Map<SVGElement, DominoDataLink>} */
+const svgToLink = new Map();
+
+function dragGroups(event) {
+    dataManager.makeCheckpoint();
+    const overlapping = document.elementsFromPoint(event.clientX, event.clientY);
+    const svgs = overlapping.map((overlap) => overlap.closest("svg")).filter((svg) => svg !== null);
+    const groups = new Set(svgs.map((svg) => svgToGroup.get(svg)).filter((group) => group !== undefined));
+
+    groups.forEach((group) => {
+        getCardsByIds(group.cards).forEach((card) => {
+            boardView.cardToView.get(card).startDrag(event);
+        });
+    });
+    selectGroups(Array.from(groups));
+}
+
+function dragLinks(event) {
+    dataManager.makeCheckpoint();
+    const overlapping = document.elementsFromPoint(event.clientX, event.clientY);
+    const svgs = overlapping.map((overlap) => overlap.closest("svg")).filter((svg) => svg !== null);
+    const links = new Set(svgs.map((svg) => svgToLink.get(svg)).filter((link) => link !== undefined));
+
+    links.forEach((link) => {
+        getCardsByIds([link.cardA, link.cardB]).forEach((card) => {
+            boardView.cardToView.get(card).startDrag(event);
+        });
+    });
+    selectLinks(Array.from(links));
+}
+
+function onCardMoved(card) {
+    boardView.projectData.groups.forEach((group) => {
+        const view = boardView.groupToView.get(group) || new DominoGroupView(group);
+        boardView.groupToView.set(group, view);
+        if (group.cards.includes(card.id)) view.regenerateSVG();
+    });
+
+    boardView.projectData.links.forEach((link) => {
+        const view = boardView.linkToView.get(link) || new DominoLinkView(link);
+        boardView.linkToView.set(link, view);
+        if (link.cardA === card.id || link.cardB === card.id) view.regenerateSVG();
+    });
+} 
+
+function refreshGroup(group) {
+    const view = boardView.groupToView.get(group) || new DominoGroupView(group);
+    boardView.groupToView.set(group, view);
+    view.regenerateSVG();
+}
+
+function refreshLink(link) {
+    const view = boardView.linkToView.get(link) || new DominoLinkView(link);
+    boardView.linkToView.set(link, view);
+    view.regenerateSVG();
+}
+
+function refreshSVGs() {
+    boardView.projectData.groups.forEach(refreshGroup);
+    boardView.projectData.links.forEach(refreshLink);
+}
+
+const cardStyleVariables = ["card-color", "text-font", "text-size", "text-color"];
+/** @param {DominoDataCardStyle} style */
+function cardStyleToCss(style) {
+    const declarations = [];
+    cardStyleVariables.forEach((name) => {
+        const value = style.properties[name];
+        if (value) declarations.push(`--${name}: ${value};`);
+    })
+
+    if (style.properties["text-center"]) declarations.push("--text-align: center;");
+
+    const rules = [
+        `.style-${style.id} { ${declarations.join(" ")} }`,
+    ];
+
+    if (style.properties["icon-hide-empty"]) {
+        rules.push(`.style-${style.id} .blank { display: none; }`);
+    }
+
+    // custom css prefix
+    if (style.properties["custom-css"]) {
+        const doc = document.implementation.createHTMLDocument("");
+        const styleElement = document.createElement("style");
+        styleElement.textContent = style.properties["custom-css"];
+        doc.body.appendChild(styleElement);
+
+        Array.from(styleElement.sheet.cssRules).forEach((rule) => {
+            if (rule instanceof CSSStyleRule) {
+                const selectors = rule.selectorText.split(",");
+                const prefixed = selectors.map((selector) => {
+                    if (selector.startsWith(".card-root")) {
+                        return `.style-${style.id}${selector}`;
+                    } else {
+                        return `.style-${style.id} ${selector}`;
+                    }
+                }).join(",");
+                rule.selectorText = prefixed;
+                rules.push(rule.cssText);
+            }
+        });
+    }
+
+    return rules.join("\n");
+}
+
+function refreshCardStyles() {
+    const element = document.getElementById("card-styles");
+    const styles = boardView.projectData.cardStyles.map(cardStyleToCss);
+    element.innerHTML = styles.join("\n");
+    cardStyleEditor.pullData();
+}
+
+function refreshBoardStyle() {
+    const style = boardView.projectData.boardStyle;
+    const bgcolor = style["background-color"];
+
+    if (bgcolor) {
+        ONE("#frame").style.setProperty("background-color", bgcolor);
+    }
+}
+
+/** @param {DominoDataCard} card */
+function boundCard(card) {
+    return new DOMRect(
+        card.position.x, 
+        card.position.y, 
+        gridSize(card.size.x, cellWidth2, cellGap), 
+        gridSize(card.size.y, cellHeight2, cellGap),
+    );
+}
+
+/** @param {DominoDataCard} card */
+function cardCenter(card) {
+    return getRectCenter(boundCard(card));
+}
+
+/** @param {DominoDataCard[]} cards */
+function boundCards(cards) {
+    return boundRects(cards.map(boundCard));
+}
+
+function gridSize(cells, cellWidth, cellGap) {
+    return cellWidth + (cells - 1) * (cellWidth + cellGap);
+}
+
+function getCardFromId(cardId) {
+    return boardView.projectData.cards.find((card) => card.id === cardId);
+}
+
+function runCardAction(action) {
+    if (action.startsWith('#')) {
+        const ids = action.slice(1).split(",");
+        const cards = getCardsByIds(ids);
+        
+        if (cards.length > 0) {
+            window.location.replace('#' + ids.join(","));
+            centerCards(cards);
+        }
+    } else if (action.startsWith('open:')) {
+        window.open(action.slice(5));
+    } else if (action.length > 0) {
+        window.open(action);
+    }
+}
+
+class DominoLinkView {
+    /** @param {DominoDataLink} link */
+    constructor(link) {
+        this.link = link;
+        this.root = svg("svg", { class: "link" });
+        this.selected = false;
+
+        const background = document.getElementById("svgs");
+        background.appendChild(this.root);
+
+        svgToLink.set(this.root, this.link);
+        this.root.addEventListener("pointerdown", (event) => {
+            if (!boardView.editable || event.button !== 0) return;
+            killEvent(event);
+            dragLinks(event);
+        });
+    }
+
+    dispose() {
+        this.root.remove();
+    }
+
+    setHighlight(value) {
+        this.selected = value;
+
+        if (this.selectElement) {
+            this.selectElement.style.display = value ? "unset" : "none";
+        }
+    }
+
+    regenerateSVG() {
+        while (this.root.children.length > 0) this.root.children[0].remove();
+        const [cardA, cardB] = [getCardFromId(this.link.cardA), getCardFromId(this.link.cardB)];
+
+        const { x, y, width, height } = boundCards([cardA, cardB]);
+        const rect = { x, y, width, height };
+
+        const { x: x1, y: y1 } = cardCenter(cardA);
+        const { x: x2, y: y2 } = cardCenter(cardB);
+        const line = { x1, y1, x2, y2 };
+
+        padRect(rect, 8);
+        const main = svg("line", { ...line, stroke: this.link.color });
+        
+        //padRect(rect, 8);           
+        this.selectElement = svg("line", {...line, "class": "selection-flash" });
+        
+        this.root.appendChild(this.selectElement);
+        this.root.appendChild(main);
+
+        {
+            const rect = this.root.getBBox();
+            padRect(rect, 16);
+            const { x, y, width, height } = rect;
+            this.root.setAttributeNS(null, "width", width.toString());
+            this.root.setAttributeNS(null, "height", height.toString());
+            this.root.setAttributeNS(null, "viewBox", `${x} ${y} ${width} ${height}`);
+            this.root.setAttributeNS(null, "transform", translationMatrix({ x, y }).toString());
+        }
+
+        this.setHighlight(this.selected);
+    }
+}
+
+class DominoGroupView {
+    /**
+     * @param {DominoDataGroup} group 
+     */
+    constructor(group) {
+        this.group = group;
+        this.root = svg("svg", { class: "group" });
+        this.selected = false;
+
+        const background = document.getElementById("svgs");
+        background.appendChild(this.root);
+        svgToGroup.set(this.root, this.group);
+        this.root.addEventListener("pointerdown", (event) => {
+            if (!boardView.editable || event.button !== 0) return;
+            killEvent(event);
+            dragGroups(event);
+        });
+    }
+
+    dispose() {
+        this.root.remove();
+    }
+
+    setHighlight(value) {
+        this.selected = value;
+
+        if (this.selectElement) {
+            this.selectElement.style.display = value ? "unset" : "none";
+        }
+    }
+
+    regenerateSVG() {
+        while (this.root.children.length > 0) this.root.children[0].remove();
+
+        const { x, y, width, height } = boundCards(getGroupCards(this.group));
+        const rect = { x, y, width, height };
+
+        padRect(rect, 8);
+        const backing = svg("rect", { ...rect, rx: 16, fill: this.group.color });
+        
+        padRect(rect, 8);           
+        this.selectElement = svg("rect", {...rect, rx: 24, fill: "gray", "class": "selection-flash" });
+        
+        this.root.appendChild(this.selectElement);
+        this.root.appendChild(backing);
+
+        {
+            const { x, y, width, height } = this.root.getBBox();
+            this.root.setAttributeNS(null, "width", width.toString());
+            this.root.setAttributeNS(null, "height", height.toString());
+            this.root.setAttributeNS(null, "viewBox", `${x} ${y} ${width} ${height}`);
+            this.root.setAttributeNS(null, "transform", translationMatrix({ x, y }).toString());
+        }
+
+        this.setHighlight(this.selected);
+    }
+}
+
+/** 
+ * @param {DominoDataCard} card 
+ */
+function duplicateCard(card) {
+    const copy = COPY(card);
+    copy.id = nanoid();
+    insertCard(scene, copy);
+    return copy;
+}
+
+class DominoCardView {
+    /**
+     * @param {PanningScene} scene 
+     */
+    constructor(scene) {
+        this.scene = scene;
+        this.textElement = html("div", { class: "card-text" });
+        const resize = svg("svg", { class: "resize-handle" }, svg("polygon", { points: "0,32 32,32 32,0" }));
+        this.bodyElement = html("div", { class: "card-body" }, this.textElement, resize);
+        this.iconElements = [0, 1, 2, 3].map((i) => html("a"));
+        const iconbar = html("div", { class: "card-icon-bar" }, ...this.iconElements);
+        this.rootElement = html("div", { class: "card-root" }, this.bodyElement, iconbar);
+
+        this.iconElements.forEach((icon, index) => {
+            icon.addEventListener("click", (event) => this.onIconClicked(event, index));
+            icon.addEventListener('pointerdown', e => e.stopPropagation());
+            icon.addEventListener('dblclick', e => e.stopPropagation());
+        });
+        
+        ONE("#cards").appendChild(this.rootElement);
+
+        listen(resize.children[0], "pointerdown", (event) => {
+            if (!boardView.editable || event.button !== 0) return;
+            killEvent(event);
+            this.startResize(event);
+        });
+
+        listen(this.rootElement, "pointerdown", (event) => {
+            if (!boardView.editable || event.button !== 0) return;
+            killEvent(event);
+
+            const duplicate = event.ctrlKey === true;
+            const selected = selectedCards.has(this.card);
+            const targets = selected ? Array.from(selectedCards) : [this.card];
+            const drags = [];
+
+            if (duplicate) {
+                dataManager.makeCheckpoint();
+                const copies = targets.map(duplicateCard);
+                if (selected) {
+                    deselectAll();
+                    copies.forEach(selectCard);
+                }
+                drags.push(...copies.map((card) => boardView.cardToView.get(card).startDrag(event)));
+                drags[0].on("click", (event) => copies.map(deleteCard));
+            } else {
+                dataManager.markDirty(`selected/position`);
+                drags.push(...targets.map((card) => boardView.cardToView.get(card).startDrag(event)));
+            }
+
+            drags[0].on("click", (event) => selectCardToggle(this.card));
+        });
+
+        listen(this.rootElement, "dblclick", (event) => {
+            killEvent(event);
+
+            if (!boardView.editable) {
+                centerCards([this.card]);
+            } else {
+                deselectCards();
+                selectCard(this.card);
+    
+                invokeAction("global-editor/open");
+                switchTab("sidebar/selection");
+            }
+        });
+    }
+
+    dispose() {
+        this.rootElement.remove();
+    }
+
+    /**
+     * @param {DominoDataCard} card 
+     */
+    setCard(card) {
+        this.card = card;
+        this.regenerate();
+    }
+
+    /** @param {string} value */
+    setCursor(value) {
+        this.rootElement.style.cursor = value;
+    }
+
+    /** @param {DOMMatrix} transform */
+    setTransform(transform) {
+        this.card.position = getMatrixTranslation(transform);
+        setElementTransform(this.rootElement, transform);
+    }
+
+    /** @param {boolean} selected */
+    setSelected(selected) {
+        this.rootElement.classList.toggle("selected", selected);
+    }
+
+    regenerate() {
+        if (!this.card) return;
+        setElementTransform(this.rootElement, translationMatrix(this.card.position));
+        this.textElement.innerHTML = parseFakedown(this.card.text);
+
+        const bounds = boundCard(this.card);
+        this.rootElement.style.width = `${bounds.width}px`;
+        this.rootElement.style.height = `${bounds.height}px`;
+        this.rootElement.setAttribute("class", "card-root " + "style-" + this.card.style ?? "");
+        this.setSelected(selectedCards.has(this.card));
+
+        this.card.icons.forEach((data, i) => {
+            const element = this.iconElements[i];
+            element.innerHTML = data.icon;
+            
+            if (data.action === "") {
+                element.removeAttribute("href");
+            } else {
+                element.href = data.action;
+            }
+
+            element.classList.toggle('blank', data.icon === '');
+            element.classList.toggle('cosmetic', data.action === '');
+        });
+
+        if (this.card.image) {
+            this.bodyElement.style.setProperty('background-image', `url(${this.card.image})`);
+        }
+
+        this.bodyElement.classList.toggle('has-image', !!this.card.image);
+    }
+
+    /** 
+     * @param {MouseEvent} event
+     * @param {number} index
+     */
+    onIconClicked(event, index) {
+        killEvent(event);
+        runCardAction(this.card.icons[index].action);
+    }
+
+    /** @param {PointerEvent} event */
+    startResize(event) {
+        function fit(value, cellSize, cellGap) {
+            let cells;
+            for (cells = 1; gridSize(cells, cellSize, cellGap) < value - cellGap; ++cells);
+            return cells;
+        }
+
+        const { x: x1, y: y1 } = getMatrixTranslation(this.scene.mouseEventToSceneTransform(event));
+        const [w1, h1] = [this.rootElement.clientWidth, this.rootElement.clientHeight];
+
+        // create target shadow
+        const target = html("div", { class: "target" });
+        this.scene.container.appendChild(target);
+        setElementTransform(target, translationMatrix(this.card.position));
+
+        const gesture = trackGesture(event);
+        gesture.on("pointermove", (event) => {
+            const { x: x2, y: y2 } = getMatrixTranslation(this.scene.mouseEventToSceneTransform(event));
+            const [dx, dy] = [x2 - x1, y2 - y1];
+            const [w2, h2] = [w1 + dx, h1 + dy];
+
+            this.card.size.x = Math.max(2, fit(w2, cellWidth2, cellGap));
+            this.card.size.y = Math.max(2, fit(h2, cellHeight2, cellGap));
+
+            this.rootElement.style.width = `${w2}px`;
+            this.rootElement.style.height = `${h2}px`;
+
+            const bounds = boundCard(this.card);
+            target.style.width = `${bounds.width}px`;
+            target.style.height = `${bounds.height}px`;
+            onCardMoved(this.card);
+        });
+        gesture.on("pointerup", (event) => {
+            const bounds = boundCard(this.card);
+            this.rootElement.style.width = `${bounds.width}px`;
+            this.rootElement.style.height = `${bounds.height}px`;
+
+            // snap card to grid
+            animateElementSize(this.rootElement, .1).then(() => target.remove());
+            target.remove();
+            
+            onCardMoved(this.card);
+        });
+        gesture.emit("pointermove", event);
+    }
+
+    /** @param {PointerEvent} event */
+    startDrag(event) {
+        // determine and save the relationship between mouse and element
+        // G = M1^ . E (element relative to mouse)
+        const mouse = this.scene.mouseEventToSceneTransform(event);
+        const grab = mouse.invertSelf().multiplySelf(translationMatrix(this.card.position));
+
+        const initialPosition = this.card.position;
+
+        // create target shadow
+        const target = html("div", { class: "target" });
+        this.scene.container.appendChild(target);
+        setElementTransform(target, translationMatrix(this.card.position));
+        const bounds = boundCard(this.card);
+        target.style.width = `${bounds.width}px`;
+        target.style.height = `${bounds.height}px`;
+
+        const drag = trackGesture(event);
+        drag.on("pointermove", (event) => {
+            // preserve the relationship between mouse and element
+            // D2 = M2 . G (drawing relative to scene)
+            const mouse = this.scene.mouseEventToSceneTransform(event);
+            const transform = mouse.multiply(grab);
+
+            // card drags free from the grid
+            this.setTransform(transform);
+            // target shadow snaps to grid as card would
+            gridSnap(transform);
+            setElementTransform(target, transform);
+
+            // TODO: this has gotta have a bigger system for updating
+            // on drag and during snap animation etc
+            onCardMoved(this.card);
+        });
+        drag.on("pointerup", (event) => {
+            const mouse = this.scene.mouseEventToSceneTransform(event);
+            const transform = mouse.multiply(grab);
+            
+            // snap card to grid
+            animateElementTransform(this.rootElement, .1).then(() => target.remove());
+            gridSnap(transform);
+            this.setTransform(transform);
+
+            this.setCursor("grab");
+
+            // TODO:
+            onCardMoved(this.card);
+
+            if (this.card.position.x === initialPosition.x && this.card.position.y === initialPosition.y) {
+                dataManager.cancelDirty(`selected/position`);
+            } else {
+                dataManager.confirmDirty(`selected/position`);
+            }
+        });
+
+        this.setCursor("grabbing");
+
+        return drag;
+    }
+}
+
+/** @param {DOMMatrix} transform */
+function snap(transform, gx = 1, gy = gx) {
+    transform.e = Math.round(transform.e / gx) * gx;
+    transform.f = Math.round(transform.f / gy) * gy;
+}
+
+function gridSnap(transform) {
+    return snap(transform, cellWidth/2, cellHeight/2);
+}
+
+/**
+ * @param {HTMLElement} element 
+ * @param {DOMMatrixReadOnly} transform 
+ */
+function setElementTransform(element, transform) {
+    element.style.setProperty("transform", transform.toString());
+}
+
+/**
+ * @param {HTMLElement} element 
+ * @param {number} duration 
+ */
+async function animateElementTransform(element, duration) {
+    element.style.transition = `transform ${duration}s ease-in-out`;
+    await sleep(duration * 1000);
+    element.style.transition = "none";
+}
+
+/**
+ * @param {HTMLElement} element 
+ * @param {number} duration 
+ */
+ async function animateElementSize(element, duration) {
+    element.style.transition = `width ${duration}s ease-in-out, height ${duration}s ease-in-out`;
+    await sleep(duration * 1000);
+    element.style.transition = "none";
+}
+
+/** 
+ * @param {PointerEvent} event 
+ */
+function trackGesture(event) {
+    const emitter = new EventEmitter();
+    const pointer = event.pointerId;
+
+    const clickMovementLimit = 5;
+    let totalMovement = 0;
+
+    const removes = [
+        listen(document, "pointerup", (event) => {
+            if (event.pointerId !== pointer) return;
+
+            removes.forEach((remove) => remove());
+            emitter.emit("pointerup", event);
+            if (totalMovement <= clickMovementLimit) emitter.emit("click", event);
+        }),
+        listen(document, "pointermove", (event) => {
+            if (event.pointerId !== pointer) return;
+
+            totalMovement += Math.abs(event.movementX);
+            totalMovement += Math.abs(event.movementY);
+            emitter.emit("pointermove", event);
+        }),
+    ];
+
+    return emitter;
+}
+
+class PointerDrag {
+    /** 
+     * @param {PointerEvent} event
+     */
+    constructor(event, { clickMovementLimit = 5 } = {}) {
+        this.events = new EventEmitter();
+        this.pointerId = event.pointerId;
+        this.clickMovementLimit = 5;
+        this.totalMovement = 0;
+
+        this.downEvent = event;
+        this.lastEvent = event; 
+
+        this.removes = [
+            listen(document, "pointerup", (event) => {
+                if (event.pointerId !== this.pointerId) return;
+    
+                this.lastEvent = event;
+                this.removes.forEach((remove) => remove());
+                this.events.emit("pointerup", event);
+                if (this.totalMovement <= clickMovementLimit) {
+                    this.events.emit("click", event);
+                }
+            }),
+            listen(document, "pointermove", (event) => {
+                if (event.pointerId !== this.pointerId) return;
+    
+                this.totalMovement += Math.abs(event.movementX);
+                this.totalMovement += Math.abs(event.movementY);
+                this.lastEvent = event;
+                this.events.emit("pointermove", event);
+            }),
+        ];
+    }
+
+    cancel() {
+        this.removes.forEach((remove) => remove());
+    }
+}
+
+const imageSize = [512, 512];
+
+async function fileToCompressedImageURL(file) {
+    const url = await dataURLFromFile(file);
+    const dataURL = await compressImageURL(url, 0.2, imageSize);
+    return dataURL;
+}
+
+async function dataTransferToImage(dt) {
+    const files = filesFromDataTransfer(dt);
+    const element = elementFromDataTransfer(dt);
+    if (files.length > 0) {
+        return await fileToCompressedImageURL(files[0]);
+    } else if (element && element.nodeName === 'IMG') {
+        return await compressImageURL(element.src, .2, imageSize);
+    }
+}
+
+function filesFromDataTransfer(dataTransfer) {
+    const clipboardFiles = 
+        Array.from(dataTransfer.items || [])
+        .filter(item => item.kind === 'file')
+        .map(item => item.getAsFile());
+    return clipboardFiles.concat(...(dataTransfer.files || []));
+}
+
+function elementFromDataTransfer(dataTransfer) {
+    const html = dataTransfer.getData('text/html');
+    return html && stringToElement(html);
+}
+
+async function compressImageURL(url, quality, size) {
+    const image = document.createElement("img");
+    image.crossOrigin = "true";
+    const canvas = document.createElement("canvas");
+
+    const [tw, th] = size;
+    canvas.width = tw;
+    canvas.height = th;
+
+    return new Promise((resolve, reject) => {
+        image.onload = () => {
+            const scale = Math.min(tw / image.width, th / image.height);
+            canvas.width = image.width * scale;
+            canvas.height = image.height * scale;
+            const context = canvas.getContext('2d');
+            context.drawImage(image, 0, 0, canvas.width, canvas.height);
+            const url = canvas.toDataURL('image/jpeg', quality);
+
+            resolve(url);
+        };
+        image.onerror = () => resolve(undefined);
+        image.src = url;
+    });
+}
+
+function stringToDocument(string) {
+    const template = document.createElement('template');
+    template.innerHTML = string;
+    return template.content;
+}
+
+function stringToElement(string) {
+    return stringToDocument(string).children[0];
+}
+
+class DominoProjectManager {
+    get data() {
+        return this.history[this.index];
+    }
+
+    get canUndo() {
+        return this.index > 0 || this.dirty;
+    }
+
+    get canRedo() {
+        return this.index < this.history.length - 1 && !this.dirty;
+    }
+
+    constructor() {
+        /** @type {DominoDataProject[]} */
+        this.history = [];
+        this.index = -1;
+        this.historyLimit = 20;
+        this.dirty = undefined;
+    }
+
+    /**
+     * @param {DominoDataProject} data 
+     */
+    reset(data) {
+        deselectAll();
+
+        this.history.length = 0;
+        this.history.push(data);
+        this.index = 0;
+        boardView.loadProject(this.data);
+    }
+
+    markDirty(path="generic") {
+        if (path === this.dirty) return;
+        this.makeCheckpoint();
+        this.dirty = path;
+    }
+
+    cancelDirty(path) {
+        if (path !== this.dirty) return;
+        this.history.splice(this.index, 1);
+        this.index -= 1;
+        this.dirty = undefined;
+        updateToolbar();
+    }
+
+    confirmDirty(path) {
+        if (path !== this.dirty) return;
+        this.dirty = undefined;
+        updateToolbar();
+    }
+
+    makeCheckpoint() {
+        this.dirty = undefined;
+        this.history.length = this.index + 1;
+        
+        this.history[this.index] = COPY(boardView.projectData);
+        this.history.push(boardView.projectData);
+        
+        if (this.index < this.historyLimit) {
+            this.index += 1;
+        } else {
+            // delete earliest history
+            this.history.splice(0, 1);
+        }
+        
+        updateToolbar();
+    }
+
+    undo() {
+        if (!this.canUndo) return;
+        this.index -= 1;
+        deselectAll();
+        boardView.loadProject(this.data);
+        this.dirty = undefined;
+    }
+
+    redo() {
+        if (!this.canRedo) return;
+        this.index += 1;
+        deselectAll();
+        boardView.loadProject(this.data);
+        this.dirty = undefined;
+    }
+}
+
+async function downloadGoogleFont(url) {
+    const face = await fetch(url).then((r) => r.text());
+    const [, srcURL] = face.match(/url\((http.*woff2)\)/);
+    const [, family] = face.match(/font-family: ['"](.*)["'];/);
+    const dataURL = await fetch(srcURL).then((r) => r.blob()).then(dataURLFromFile);
+    return { family, css: face.replace(srcURL, dataURL) };
+}
+
+async function replaceFont(url) {
+    const { family, css } = await downloadGoogleFont(url);
+    ONE("#active-font").textContent = css;
+    ONE("#font").textContent = css;
+    ONE("#font").setAttribute("data-font-family", family);
+    document.body.style.fontFamily = family;
+}
+
+    </script>
+    <script id="editor/card-editor.js">class CardEditor {
+    constructor() {
+        /** @type {DominoDataCard[]} */
+        this.cards = [];
+        
+        //this.container = elementByPath("card-editor", "div");
+        this.promptText = elementByPath("selection/prompt", "span");
+
+        this.textInput = elementByPath("card-editor/text/value", "textarea");
+        this.altTextInput = elementByPath("card-editor/image/alt", "textarea");
+        this.styleList = elementByPath("card-editor/styles", "select");
+
+        this.iconIconInputs = /** @type {HTMLInputElement[]} */ ([1, 2, 3, 4].map((i) => elementByPath(`card-editor/icons/${i}/icon`, "input")));
+        this.iconActionInputs = /** @type {HTMLInputElement[]} */ ([1, 2, 3, 4].map((i) => elementByPath(`card-editor/icons/${i}/action`, "input")));
+
+        [0, 1, 2, 3].forEach((i) => {
+            this.iconIconInputs[i].addEventListener("input", () => {
+                dataManager.markDirty(this.cards[0].id + "/icons");
+                this.pushData();
+            });
+            this.iconActionInputs[i].addEventListener("input", () => {
+                dataManager.markDirty(this.cards[0].id + "/icons");
+                this.pushData();
+            });
+        });
+
+        this.textInput.addEventListener("input", () => {
+            dataManager.markDirty(this.cards[0].id + "/text");
+            this.pushData();
+        });
+
+        this.altTextInput.addEventListener("input", () => {
+            dataManager.markDirty(this.cards[0].id + "/alttext");
+            this.pushData();
+        });
+
+        setActionHandler("card-editor/image/upload", async () => {
+            const [file] = await pickFiles("image/*");
+            if (!file) return;
+            dataManager.makeCheckpoint();
+            this.cards[0].image = await fileToCompressedImageURL(file);
+            this.pushData();
+        });
+
+        setActionHandler("card-editor/image/remove", () => {
+            if (!this.cards[0].image) return;
+            dataManager.makeCheckpoint();
+            this.cards[0].image = undefined;
+            this.pushData();
+        });
+
+        setActionHandler("card-editor/text/bold", () => this.wrapSelectedText("**", "**"));
+        setActionHandler("card-editor/text/italic", () => this.wrapSelectedText("*", "*"));
+        setActionHandler("card-editor/text/strike", () => this.wrapSelectedText("~~", "~~"));
+        setActionHandler("card-editor/text/header", () => this.wrapSelectedText("##", "##"));
+
+        setActionHandler("card-editor/styles/edit", () => {
+            cardStyleEditor.open();
+            cardStyleEditor.setSelectedStyle(this.styleList.value);
+            switchTab("sidebar/styles");
+        });
+
+        this.styleList.addEventListener("change", () => {
+            dataManager.makeCheckpoint();
+            this.pushData();
+        });
+    }
+
+    /** @param {DominoDataCard[]} cards */
+    openMany(cards) {
+        this.promptText.textContent = `${cards.length} cards selected`;
+
+        elementByPath("card-editor/text", "div").hidden = cards.length > 1;
+        elementByPath("card-editor/icons", "div").hidden = cards.length > 1;
+        elementByPath("card-editor/image", "div").hidden = cards.length > 1;
+        elementByPath("card-editor/style", "div").hidden = false;
+        elementByPath("selection/link", "button").hidden = cards.length !== 1;
+        elementByPath("selection/group", "button").hidden = cards.length === 1;
+        this.cards = cards;
+        this.pullData();
+
+        refreshDropdown(
+            this.styleList,
+            [{id: "default", name: "default"}, ...boardView.projectData.cardStyles],
+            (style) => html("option", { value: style.id }, style.name),
+        );
+    }
+
+    close() {
+        this.cards = []; 
+
+        this.promptText.textContent = `no cards selected`;
+        elementByPath("card-editor/text", "div").hidden = true;
+        elementByPath("card-editor/icons", "div").hidden = true;
+        elementByPath("card-editor/image", "div").hidden = true;
+        elementByPath("card-editor/style", "div").hidden = true;
+    }
+
+    pullData() {
+        if (this.cards.length === 1) {
+            const [card] = this.cards;
+
+            this.textInput.value = card.text;
+            this.altTextInput.value = card.alttext || "";
+
+            card.icons.slice(0, 4).forEach((icon, i) => {
+                this.iconIconInputs[i].value = icon.icon;
+                this.iconActionInputs[i].value = icon.action;
+            });
+
+            [0, 1, 2, 3].forEach((i) => {
+                const icon = card.icons[i] || { icon: "", action: "" };
+
+                this.iconIconInputs[i].value = icon.icon;
+                this.iconActionInputs[i].value = icon.action;
+            });
+
+            this.styleList.value = card.style ?? "";
+        } else {
+            const styles = new Set(this.cards.map((card) => card.style));
+            const [style] = styles.size === 1 ? styles : [undefined];
+            this.styleList.value = style;
+        }
+    }
+
+    pushData() {
+        if (this.cards.length === 1) {
+            const [card] = this.cards;
+            card.text = this.textInput.value;
+            card.icons = [0, 1, 2, 3].map((i) => {
+                return { 
+                    icon: this.iconIconInputs[i].value, 
+                    action: this.iconActionInputs[i].value,
+                };
+            });
+            card.alttext = this.altTextInput.value;
+            card.style = this.styleList.value;
+        } else {
+            const style = this.styleList.value;
+            if (style) this.cards.forEach((card) => card.style = style);
+        }
+    
+        this.cards.forEach((card) => boardView.cardToView.get(card).regenerate());
+    }
+
+    /** @param {ClipboardEvent} event */
+    async paste(event) {
+        if (this.cards.length !== 1) return;
+        const [card] = this.cards;
+
+        const image = await dataTransferToImage(event.clipboardData);
+
+        if (image) {
+            dataManager.makeCheckpoint();
+            card.image = image;
+            this.pushData();
+            killEvent(event);
+        }
+    }
+
+    /**
+     * @param {string} prefix
+     * @param {string} suffix
+     */
+    wrapSelectedText(prefix, suffix) {
+        dataManager.markDirty(this.cards[0].id + "/text");
+        const start = this.textInput.selectionStart;
+        const end = this.textInput.selectionEnd;
+        const text = this.textInput.value.substring(start, end);
+        const prev = this.textInput.value;
+        const next = prev.slice(0, start) + prefix + text + suffix + prev.slice(end);
+
+        this.textInput.value = next;
+        this.pushData();
+
+        this.textInput.select();
+        this.textInput.setSelectionRange(start + prefix.length, end + prefix.length);
+    }
+}
+
+    </script>
+    <script id="editor/cardstyle-editor.js">function deleteCardStyle(style) {
+    arrayDiscard(boardView.projectData.cardStyles, style);
+    boardView.projectData.cards.forEach((card) => {
+        if (card.style === style.id) delete card.style;
+    });
+    refreshCardStyles();
+}
+
+// please don't tell anyone how i live..
+class CardStyleEditorRow {
+    /**
+     * @param {string} name 
+     * @param {keyof DominoDataCardStyle["properties"]} key 
+     * @param {HTMLElement[]} inputs 
+     */
+    constructor(editor, name, key, ...inputs) {
+        this.editor = editor;
+        this.toggle = html("input", { type: "checkbox", class: "check" });
+        this.label = html("span", {}, name);
+
+        this.name = name;
+        this.key = key;
+
+        this.elements = [this.toggle, this.label, ...inputs];
+
+        this.toggle.addEventListener("change", () => {
+            inputs.forEach((input) => input.disabled = !this.toggle.checked);
+            this.push();
+        });
+
+        inputs.forEach((input) => input.disabled = true);
+        inputs.forEach((input) => input.addEventListener("input", () => this.push()));
+    }
+
+    push() {
+        const style = this.editor.getSelectedStyle();
+        if (!style) return;
+        this.pushData(style);
+        refreshCardStyles();
+    }
+
+    /** @param {DominoDataCardStyle} style */
+    pullData(style) {
+        
+    }
+
+    pushData(style) {
+        
+    }
+}
+
+class CardStyleSize extends CardStyleEditorRow {
+    constructor(editor, name, key, min, max, unit="px") {
+        const input = html("input", { type: "range", min, max });
+        super(editor, name, key, input);
+        this.input = input;
+        this.unit = unit;
+    }
+
+    /** @param {DominoDataCardStyle} style */
+    pullData(style) {
+        const value = style.properties[this.key];
+
+        if (value !== undefined) {
+            this.toggle.checked = true;
+            this.input.disabled = false;
+            this.input.value = value.slice(0, -this.unit.length);
+        } else {
+            this.toggle.checked = false;
+            this.input.disabled = true;
+        }
+    }
+
+    /** @param {DominoDataCardStyle} style */
+    pushData(style) {
+        style.properties[this.key] = this.toggle.checked 
+                                   ? this.input.value + this.unit 
+                                   : undefined;
+    }
+}
+
+class CardStyleColor extends CardStyleEditorRow {
+    constructor(editor, name, key, alpha=false) {
+        const input = html("input", { type: "color" });
+        const slider = alpha ? html("input", { type: "range", min: "0", max: "255" }) : undefined;
+        if (slider) {
+            super(editor, name, key, input, slider);
+        } else {
+            super(editor, name, key, input);
+        }
+        this.input = input;
+        this.slider = slider;
+    }
+
+    /** @param {DominoDataCardStyle} style */
+    pullData(style) {
+        const value = style.properties[this.key];
+
+        if (value !== undefined) {
+            this.toggle.checked = true;
+            this.input.disabled = false;
+            this.input.value = value.slice(0, 7);
+            
+            if (this.slider) {
+                this.slider.value = parseInt(value.slice(-2), 16).toString();
+                this.slider.disabled = false;
+            }
+        } else {
+            this.toggle.checked = false;
+            this.input.disabled = true;
+            if (this.slider) this.slider.disabled = true;
+        }
+    }
+
+    /** @param {DominoDataCardStyle} style */
+    pushData(style) {
+        const alpha = this.slider ? this.slider.valueAsNumber.toString(16) : "ff";
+        style.properties[this.key] = this.toggle.checked 
+                                   ? this.input.value + alpha
+                                   : undefined;
+    }
+}
+
+class CardStyleToggle extends CardStyleEditorRow {
+    /** @param {DominoDataCardStyle} style */
+    pullData(style) {
+        this.toggle.checked = style.properties[this.key] !== undefined;
+    }
+
+    /** @param {DominoDataCardStyle} style */
+    pushData(style) {
+        style.properties[this.key] = this.toggle.checked ? "true" : undefined;
+    }
+}
+
+class CardStyleSelect extends CardStyleEditorRow {
+    constructor(editor, name, key) {
+        const input = html("select", {});
+        super(editor, name, key, input);
+        this.select = input;
+    }
+
+    /** @param {DominoDataCardStyle} style */
+    pullData(style) {
+        const value = style.properties[this.key];
+
+        if (value !== undefined) {
+            this.toggle.checked = true;
+            this.select.disabled = false;
+            this.select.value = value;
+        } else {
+            this.toggle.checked = false;
+            this.select.disabled = true;
+        }
+    }
+
+    /** @param {DominoDataCardStyle} style */
+    pushData(style) {
+        style.properties[this.key] = this.toggle.checked 
+                                   ? this.select.value 
+                                   : undefined;
+    }
+}
+
+class CardStyleEditor {
+    constructor() {
+        this.root = elementByPath("global-editor", "div");
+
+        const container = document.getElementById("card-style-fields");
+
+        this.titleInput = elementByPath("global-editor/title", "input");
+        this.focusInput = elementByPath("global-editor/focus", "input");
+        this.backgroundColorInput = elementByPath("global-editor/style/background-color", "input");
+
+        this.nameInput = elementByPath("global-editor/card-styles/selected/name", "input");
+        this.textFontRow = new CardStyleSelect(this, "font", "text-font");
+
+        this.rows = [
+            new CardStyleSize(this, "size", "text-size", 8, 64),
+            new CardStyleColor(this, "color", "text-color"),
+            new CardStyleToggle(this, "center", "text-center"),
+            new CardStyleColor(this, "color", "card-color", true),
+            this.textFontRow,
+        ];
+
+        container.replaceChildren(
+            html("h2", {}, "text"),
+            html("div", { class: "settings-grid" },
+                ...this.textFontRow.elements,
+                ...this.rows[0].elements,
+                ...this.rows[1].elements,
+                ...this.rows[2].elements,
+            ),
+            html("h2", {}, "card"),
+            html("div", { class: "settings-grid" },
+                ...this.rows[3].elements,
+            ),
+        );
+
+        this.backgroundColorInput.addEventListener("input", () => {
+            dataManager.markDirty("global/background-color");
+            boardView.projectData.boardStyle["background-color"] = this.backgroundColorInput.value;
+            refreshBoardStyle();
+        });
+
+        this.focusInput.addEventListener("input", () => {
+            dataManager.markDirty("global/focus");
+            boardView.projectData.details.focus = this.focusInput.value;
+        });
+
+        this.nameInput.addEventListener("input", () => {
+            const style = this.getSelectedStyle();
+            if (style) {
+                dataManager.markDirty(this.selectedStyleId + "/name");
+                style.name = this.nameInput.value;
+            }
+        });
+
+        this.styleSelect = elementByPath("global-editor/card-styles/selected", "select");
+        this.styleSelect.addEventListener("change", () => {
+            this.setSelectedStyle(this.styleSelect.value);
+        });
+
+        this.customCssInput = elementByPath("global-editor/card-styles/selected/custom-css", "textarea");
+        this.customCssInput.addEventListener("input", () => {
+            const style = this.getSelectedStyle();
+            if (style) {
+                dataManager.markDirty(this.selectedStyleId + "/custom-css");
+                style.properties["custom-css"] = this.customCssInput.value;
+                refreshCardStyles();
+            }
+        });
+
+        this.titleInput.addEventListener("input", () => {
+            dataManager.markDirty("global/title");
+            boardView.projectData.details.title = this.titleInput.value;
+        });
+
+        setActionHandler("global-editor/open", () => this.open());
+        setActionHandler("global-editor/close", () => this.close());
+        setActionHandler("global-editor/toggle", () => this.toggle());
+
+        setActionHandler("global-editor/card-style/new", () => {
+            dataManager.makeCheckpoint();
+            const style = {
+                id: nanoid(),
+                name: "new style",
+                properties: {},
+            };
+
+            boardView.projectData.cardStyles.push(style);
+            this.setSelectedStyle(style.id);
+        });
+
+        setActionHandler("global-editor/card-style/selected/duplicate", () => {
+            dataManager.makeCheckpoint();
+            const style = this.getSelectedStyle();
+            const copy = JSON.parse(JSON.stringify(style));
+            copy.id = nanoid();
+            copy.name += " (copy)";
+            boardView.projectData.cardStyles.push(copy);
+            this.setSelectedStyle(copy.id);
+        });
+
+        setActionHandler("global-editor/card-style/selected/delete", () => {
+            if (boardView.projectData.cardStyles.length <= 1) return;
+            dataManager.makeCheckpoint();
+            const style = this.getSelectedStyle();
+            deleteCardStyle(style);
+            this.setSelectedStyle(boardView.projectData.cardStyles[0].id);
+        });
+    }
+
+    getSelectedStyle() {
+        const styles = boardView.projectData.cardStyles;
+        return styles.find((style) => style.id === this.selectedStyleId);
+    }
+
+    pullData() {
+        this.titleInput.value = boardView.projectData.details.title;
+        this.focusInput.value = boardView.projectData.details.focus;
+        this.backgroundColorInput.value = boardView.projectData.boardStyle["background-color"] || "#b7b8b0";
+
+        refreshDropdown(
+            this.styleSelect,
+            boardView.projectData.cardStyles,
+            (style) => html("option", { value: style.id }, style.name),
+        );
+
+        if (!this.selectedStyleId) this.selectedStyleId = boardView.projectData.cardStyles[0].id;
+        this.styleSelect.value = this.selectedStyleId;
+
+        refreshDropdown(
+            this.textFontRow.select,
+            ["default", "monospace", "serif", "sans-serif", "cursive"],
+            (font) => html("option", { value: font }, font),
+        );
+
+        const style = this.getSelectedStyle();
+        if (!style) return;
+
+        this.nameInput.value = style.name;
+        this.rows.forEach((row) => row.pullData(style));
+        this.customCssInput.value = style.properties["custom-css"] || "";
+
+        const deleteButton = elementByPath("global-editor/card-style/selected/delete", "button");
+        deleteButton.disabled = boardView.projectData.cardStyles.length <= 1;
+    }
+
+    setSelectedStyle(styleId) {
+        this.selectedStyleId = styleId;
+        this.pullData();
+    }
+
+    open() {
+        this.root.hidden = false;
+        this.pullData();
+    }
+
+    close() {
+        this.root.hidden = true;
+    }
+
+    toggle() {
+        if (this.root.hidden) this.open();
+        else this.close();
+    }
+}
+
+    </script>
+    <script id="editor/editor.js">function saveAs(blob, name) {
+    const element = document.createElement("a");
+    const url = window.URL.createObjectURL(blob);
+    element.href = url;
+    element.download = name;
+    element.click();
+    window.URL.revokeObjectURL(url);
+};
+
+/** @param {DominoDataProject} projectData */
+function createStandalonePlayer(projectData) {
+    const clone = /** @type {HTMLElement} */ (document.documentElement.cloneNode(true));
+    ALL("[data-empty]", clone).forEach((element) => element.replaceChildren());
+    ALL("[data-editor-only]", clone).forEach((element) => element.remove());
+    ONE("body", clone).setAttribute("data-player", "true");
+    ONE("title", clone).innerHTML = projectData.details.name;
+    ONE("#project-data", clone).innerHTML = JSON.stringify(projectData);
+    ONE('[data-path="global-editor"]', clone).hidden = true;
+    ONE('#sidebar-toggle', clone).hidden = true;
+    return clone;
+}
+
+const projectToHTML = () => {
+    const clone = createStandalonePlayer(boardView.projectData);
+    return clone.outerHTML;
+}
+
+setActionHandler("project/export/html", async () => {
+    const name = boardView.projectData.details.name + ".html";
+    const blob = textToBlob(projectToHTML(), "text/html");
+    saveAs(blob, name);
+});
+
+setActionHandler("global/import", async () => {
+    const [file] = await pickFiles("text/html");
+    const text = await textFromFile(file);
+    const html = await htmlFromText(text);
+
+    const json = ONE("#project-data", html).innerHTML;
+    const projectData = JSON.parse(json);
+    projectData.details.id = nanoid();
+    dataManager.reset(projectData);
+});
+
+setActionHandler("global/new", async () => {
+    /** @type {DominoDataProject} */
+    const blank = {
+        details: {
+            id: nanoid(),
+            title: "new project",
+            name: "project",
+            focus: "",
+        },
+        cards: [],
+        groups: [],
+        links: [],
+        cardStyles: COPY(boardView.projectData.cardStyles),
+        boardStyle: COPY(boardView.projectData.boardStyle), 
+    }
+
+    dataManager.reset(blank);
+});
+
+async function refreshSaves() {
+    const saves = await listProjects();
+    saves.sort((a, b) => (new Date(b.date)).getTime() - (new Date(a.date)).getTime());
+
+    const options = saves.map(({ title, date, id }) => {
+        const date_ = new Date(date).toLocaleDateString();
+        const label = `${title} (${date_})`;
+        return html("option", { value: id }, label);
+    });
+    elementByPath("global/saves", "select").replaceChildren(...options);
+}
+
+setActionHandler("project/save", async () => {
+    const timer = sleep(250);
+    const saveButton = ONE("#save");
+    saveButton.disabled = true;
+    saveButton.innerText = "⏳";
+    await saveProject(boardView.projectData, boardView.projectData.details.id);
+    refreshSaves();
+    await timer;
+    saveButton.disabled = false;
+    saveButton.innerText = "💾"
+});
+
+setActionHandler("global/saves/load", async () => {
+    const id = elementByPath("global/saves", "select").value;
+    return loadProjectAction(id);
+});
+
+async function loadProjectAction(id) {
+    const project = await loadProject(id);
+    dataManager.reset(project);
+    invokeAction("global/center-focus");
+    
+    const url = new URL(window.location.href);
+    url.searchParams.set("load", id);
+    window.history.pushState({}, "", url.href);
+}
+
+setActionHandler("global/saves/duplicate", async () => {
+    const id = elementByPath("global/saves", "select").value;
+    const project = COPY(await loadProject(id));
+    project.details.id = nanoid();
+    project.details.title += " (copy)";
+    await saveProject(project, project.details.id);
+    refreshSaves();
+});
+
+setActionHandler("global/saves/delete", async () => {
+    const id = elementByPath("global/saves", "select").value;
+    await deleteProject(id);
+    refreshSaves();
+});
+
+setActionHandler("show:sidebar/board", refreshSaves);
+
+setActionHandler("project/publish/neocities", async () => {
+    const ready = new Promise((resolve, reject) => {
+        const remove = listen(window, "message", (event) => {
+            if (event.origin !== "https://kool.tools") return;
+            remove();
+            resolve();
+        });
+    });
+
+    const success = new Promise((resolve, reject) => {
+        const remove = listen(window, "message", (event) => {
+            if (event.origin !== "https://kool.tools") return;
+
+            if (event.data.error) {
+                remove();
+                reject(event.data.error);
+            } else if (event.data.url) {
+                remove();
+                resolve(event.data.url);
+            }
+        });
+    });
+
+    const name = boardView.projectData.details.title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    const popup = window.open(
+        "https://kool.tools/neocities-publisher/index.html", 
+        "neocities publisher",
+        "left=10,top=10,width=320,height=320");
+    const html = projectToHTML();
+    await ready;
+    popup.postMessage({ name, html }, "https://kool.tools");
+    const url = await success;
+    popup.close();
+
+    const viewButton = ONE("#neocities-view");
+    viewButton.disabled = false;
+    viewButton.onclick = () => window.open(url);
+});
+
+class LinkEditor {
+    constructor() {
+        this.colorInput = elementByPath("link/color", "input");
+        /** @type {DominoDataLink[]} */
+        this.links = [];
+
+        this.colorInput.addEventListener("input", () => {
+            dataManager.markDirty("links");
+            this.links.forEach((link) => {
+                link.color = this.colorInput.value;
+                boardView.linkToView.get(link).regenerateSVG();
+            });
+        });
+    }
+
+    /** @param {DominoDataLink[]} links */
+    openLinks(links) {
+        this.links = links;
+        
+        if (links.length === 1) this.colorInput.value = links[0].color;
+    }
+
+    close() {
+        this.links = [];
+    }
+}
+
+class GroupEditor {
+    constructor() {
+        this.colorInput = elementByPath("group/color", "input");
+        /** @type {DominoDataGroup[]} */
+        this.groups = [];
+
+        this.colorInput.addEventListener("input", () => {
+            dataManager.markDirty("group");
+            this.groups.forEach((group) => {
+                group.color = this.colorInput.value;
+                boardView.groupToView.get(group).regenerateSVG();
+            });
+        });
+    }
+
+    /** @param {DominoDataGroup[]} groups */
+    openGroups(groups) {
+        this.groups = groups;
+        
+        if (groups.length === 1) this.colorInput.value = groups[0].color;
+    }
+
+    close() {
+        this.groups = [];
+    }
+}
+
+
+    </script>
+    <script id="player.js">/** @param {DominoDataProject} projectData */
+function repairProjectData(projectData) {
+    const cardIds = new Set(projectData.cards.map((card) => card.id));
+    projectData.links = projectData.links.filter((link) => cardIds.has(link.cardA) && cardIds.has(link.cardB));
+    projectData.groups = projectData.groups.filter((group) => new Set([...group.cards, ...cardIds]).size === cardIds.size);
+}
+
+class DominoBoardView {
+    constructor() {
+        /** @type {Map<DominoDataCard, DominoCardView>} */
+        this.cardToView = new Map();
+        /** @type {Map<DominoDataGroup, DominoGroupView>} */
+        this.groupToView = new Map();
+        /** @type {Map<DominoDataLink, DominoLinkView>} */
+        this.linkToView = new Map();
+
+        this.editable = true;
+    }
+
+    /** @param {DominoDataProject} projectData */
+    loadProject(projectData) {
+        repairProjectData(projectData);
+
+        this.clear();
+        this.projectData = projectData;
+
+        this.projectData.cards.forEach((card) => {
+            const view = new DominoCardView(scene);
+            view.setCard(card);
+            this.cardToView.set(card, view);
+        });
+
+        refreshSVGs();
+        refreshCardStyles();
+        refreshBoardStyle();
+    }
+
+    clear() {
+        this.projectData = undefined;
+        this.cardToView.forEach((view) => view.dispose());
+        this.groupToView.forEach((view) => view.dispose());
+        this.linkToView.forEach((view) => view.dispose());
+        this.cardToView.clear();
+        this.groupToView.clear();
+        this.linkToView.clear();
+    }
+}
+
+class TransformGesture {
+    tryAddPointerDrag(event) {
+        const drag = new PointerDrag(event);
+        drag.events.on("pointermove", () => {
+
+        });
+    }
+}
+
+class PanningScene {
+    get hidden() { return this.container.hidden; }
+    set hidden(value) { this.container.hidden = value; }
+
+    /**
+     * @param {HTMLElement} container 
+     */
+    constructor(container) {
+        this.viewport = container.parentElement;
+        this.container = container;
+        this.transform = new DOMMatrix();
+        this.locked = false;
+
+        this.minScale = 1 / 8;
+        this.maxScale = 2;
+
+        this.pointerA = undefined;
+        this.pointerB = undefined;
+        let ratio = 1;
+
+        this.viewport.addEventListener("pointerdown", (event) => {
+            if (this.hidden || this.locked) return;
+            killEvent(event);
+
+            if (!this.pointerA) {
+                // determine and save the relationship between mouse and scene
+                // G = M1^ . S (scene relative to mouse)
+                const mouse = this.mouseEventToViewportTransform(event);
+                const grab = mouse.invertSelf().multiplySelf(this.transform);
+                document.body.style.setProperty("cursor", "grabbing");
+                this.viewport.style.setProperty("cursor", "grabbing");
+                this.container.classList.toggle("skip-transition", true);
+
+                ratio = 1;
+                const drag = new PointerDrag(event);
+                drag.events.on("pointermove", (event) => {
+                    // preserve the relationship between mouse and scene
+                    // D2 = M2 . G (drawing relative to scene)
+                    const mouse = this.mouseEventToViewportTransform(event);
+                    mouse.scaleSelf(ratio, ratio);
+                    this.transform = mouse.multiply(grab);
+                    this.refresh();
+                });
+                drag.events.on("pointerup", (event) => {
+                    document.body.style.removeProperty("cursor");
+                    this.viewport.style.removeProperty("cursor");
+                    this.container.classList.toggle("skip-transition", false);
+
+                    if (this.pointerB) this.pointerB.cancel();
+
+                    this.pointerA = undefined;
+                    this.pointerB = undefined;
+                });
+                drag.events.on("click", (event) => {
+                    deselectAll();
+                });
+
+                this.pointerA = drag;
+            } else if (!this.pointerB) {
+                const mouseB = this.mouseEventToViewportTransform(event);
+                const mouseA = this.mouseEventToViewportTransform(this.pointerA.lastEvent);
+                const dx = mouseB.e - mouseA.e;
+                const dy = mouseB.f - mouseA.f;
+                const initialD = Math.sqrt(dx*dx + dy*dy); 
+
+                this.pointerB = new PointerDrag(event);
+                this.pointerB.events.on("pointermove", (event) => {
+                    const mouseB = this.mouseEventToViewportTransform(event);
+                    const mouseA = this.mouseEventToViewportTransform(this.pointerA.lastEvent);
+                    const dx = mouseB.e - mouseA.e;
+                    const dy = mouseB.f - mouseA.f;
+                    const currentD = Math.sqrt(dx*dx + dy*dy);
+                    ratio = currentD / initialD;
+                });
+                this.pointerB.events.on("pointerup", () => {
+                    this.pointerB = undefined;
+                });
+            }
+        });
+        
+        this.viewport.addEventListener('wheel', (event) => {
+            if (this.hidden || this.locked) return;
+
+            event.preventDefault();
+
+            const mouse = this.mouseEventToViewportTransform(event);
+            const origin = (this.transform.inverse().multiply(mouse)).transformPoint();
+
+            const deltaY = event.deltaMode === 0 ? event.deltaY : event.deltaY * 33;
+
+            const prevScale = getMatrixScale(this.transform).x;
+            const [minDelta, maxDelta] = [this.minScale/prevScale, this.maxScale/prevScale];
+            const magnitude = Math.min(Math.abs(deltaY), 25);
+            const exponent = Math.sign(deltaY) * magnitude * -.01;
+            const deltaScale = clamp(Math.pow(2, exponent), minDelta, maxDelta);
+
+            // prev * delta <= max -> delta <= max/prev
+            this.transform.scaleSelf(
+                deltaScale, deltaScale, deltaScale,
+                origin.x, origin.y, origin.z,
+            );
+
+            ratio *= deltaScale;
+            this.refresh();
+        });
+
+        this.refresh();
+    }
+
+    refresh() {
+        setElementTransform(this.container, this.transform);
+    }
+
+    frameRect(rect, minScale=.25, maxScale=2) {
+        const bounds = this.viewport.getBoundingClientRect();
+
+        // find scale that contains all width, all height, and is within limits
+        const sx = bounds.width / rect.width;
+        const sy = bounds.height / rect.height;
+        const scale = clamp(Math.min(sx, sy), minScale, maxScale);
+
+        // find translation that centers the rect in the viewport
+        const ex = (1/scale - 1/sx) * bounds.width * .5;
+        const ey = (1/scale - 1/sy) * bounds.height * .5;
+        const [ox, oy] = [-rect.x + ex, -rect.y + ey];
+
+        this.transform = new DOMMatrix();
+        this.transform.scaleSelf(scale, scale);
+        this.transform.translateSelf(ox, oy);
+        this.refresh();
+    }
+
+    mouseEventToViewportTransform(event) {
+        const rect = this.viewport.getBoundingClientRect();
+        const [sx, sy] = [event.clientX - rect.x, event.clientY - rect.y];
+        const matrix = (new DOMMatrixReadOnly()).translate(sx, sy);
+        return matrix;
+    }
+
+    mouseEventToSceneTransform(event) {
+        const mouse = this.mouseEventToViewportTransform(event);
+        mouse.preMultiplySelf(this.transform.inverse());
+        return mouse;
+    }
+}
+
+function fakedownToTag(text, fd, tag) {
+    const pattern = new RegExp(`${fd}([^${fd}]+)${fd}`, 'g');
+    return text.replace(pattern, `<${tag}>$1</${tag}>`);
+}
+
+function parseFakedown(text) {
+    if (text.startsWith('`'))
+        return `<pre>${text.slice(1)}</pre>`;
+    text = text.replace(/([^-])--([^-])/g, '$1—$2');
+    text = fakedownToTag(text, '##\n?', 'h3');
+    text = fakedownToTag(text, '~~', 's');
+    text = fakedownToTag(text, '__', 'strong');
+    text = fakedownToTag(text, '\\*\\*', 'strong');
+    text = fakedownToTag(text, '_', 'em');
+    text = fakedownToTag(text, '\\*', 'em');
+    text = text.replace(/\n/g, '<br>');
+    return text;
+}
+
+    </script>
+    <script id="main.js">const cellWidth = 256;
+const cellHeight = 160;
+
+const cellGap = 16;
+const cellWidth2 = 112;
+const cellHeight2 = 64;
+
+/** @type {PanningScene} */
+let scene;
+
+async function start() {
+    initui();
+    scene = new PanningScene(document.getElementById("scene"));
+
+    const dataElement = ONE("#project-data");
+    const player = ONE("body").getAttribute("data-player") === "true";
+
+    /** @type {DominoDataProject} */
+    const data = JSON.parse(dataElement.innerHTML);
+
+    await test();
+    data.details.id = nanoid();
+    dataManager.reset(data);
+    invokeAction("global/center-focus");
+
+    console.log("player", player);
+    if (player) {
+        // data
+        boardView.editable = false;
+    } else {
+        // data
+
+        const search = new URLSearchParams(location.search);
+        const loadID = search.get("load");
+        if (loadID) {
+            const project = await loadProject(loadID);
+            dataManager.reset(project);
+            invokeAction("global/center-focus");
+        }
+    }
+}
+
+async function loadData() {
+    console.log("data");
+}
+
+async function loadDataDeferred() {
+    console.log("deferred");
+
+    const font = ONE("#font");
+    const family = font.getAttribute("data-font-family");
+
+    const css = html("style", { id: "active-font" });
+    css.textContent = font.textContent;
+    css.setAttribute("data-editor-only", undefined);
+    document.head.appendChild(css);
+
+    ONE(":root").style.fontFamily = family;
+}
+
+    </script>
+  <style>:is([id*='google_ads_iframe'],[id*='taboola-'],.taboolaHeight,.taboola-placeholder,#top-ad,#credential_picker_container,#credentials-picker-container,#credential_picker_iframe,#onetap_google_intermediate_iframe,[id*='google-one-tap-iframe'],#google-one-tap-popup-container,.google-one-tap__module,.google-one-tap-modal-div,.adthrive-auto-injected-player-container,.adthrive[id^="cls-video-container"]:has(.adthrive-auto-injected-player-container),#amp_floatingAdDiv,#ez-content-blocker-container) {display:none!important;min-height:0!important;height:0!important;}</style></head>
+  <body class="no-select" onload="start()" style="" data-player="true">
+    <div id="frame" style="background-color: rgb(228, 222, 205);">
+      <div id="scene" style="transform: matrix3d(0.125, 0, 0, 0, 0, 0.125, 0, 0, 0, 0, 0.125, 0, 649.793, 97.7298, 0, 1); transition: none;" class="">
+        <div id="svgs" data-empty=""></div>
+        <div id="cards" data-empty=""></div>
+      </div>
+    </div>
+    <div class="toolbar-group icon-bar" id="sidebar-toggle" hidden="">
+      <div class="icon" data-action="global-editor/toggle" title="board settings">🔨</div>
+    </div>
+    <div id="toolbar" data-block-clicks="">
+      <div class="toolbar-group icon-bar">
+        <div class="icon" id="undo" data-action="global/undo" title="undo">↩</div>
+        <div class="icon disabled" id="redo" data-action="global/redo" title="redo">↪</div>
+        <div class="icon" id="save" data-action="project/save" title="save in browser">💾</div>
+        <div class="icon" data-action="global/view-saves" title="view saved boards">📂</div>
+      </div>
+      <div class="toolbar-group icon-bar" data-path="picker" hidden=""><span>click a card to link to</span>
+        <div class="icon" data-action="picker/cancel" title="cancel picking">❌</div>
+      </div>
+    </div>
+    <div id="left-sidebar" data-block-clicks="" data-path="global-editor" hidden="">
+      <div class="tab-bar">
+        <button data-action="global-editor/close">◀</button>
+        <!--button(data-tab-toggle="sidebar/about" data-tab-default) about-->
+        <button data-tab-toggle="sidebar/board" class="active">board</button>
+        <button data-tab-toggle="sidebar/styles">styles</button>
+        <button data-tab-toggle="sidebar/selection" data-tab-default="" class="">selection</button>
+      </div>
+      <div class="editor-page" data-tab-body="sidebar/about" hidden=""><h2>about domino</h2>
+<p>domino is a tool for collaging fragmented thoughts into a larger idea.
+it's essentially a tool for making a particular kind of mindmap and sharing it
+as a page on your website or itch.io.</p>
+<p>you can find out more about domino on <a href="https://kool.tools/domino/">the release page</a>. the source
+code for original releases can be found <a href="https://github.com/Ragzouken/domino2">on github</a>.</p>
+<p>i'm <a href="https://twitter.com/ragzouken">mark wonnacott a.k.a candle</a> and i created domino as a
+<a href="https://kool.tools/2020/02/26/speculations.html">response to my frustration</a> trying to express myself in Emilie Reed's
+writing jams.</p>
+<h2>thanks</h2>
+<p><strong>Em Reed</strong> for her writing jams--especially <a href="https://itch.io/jam/speculation-jam">Speculation Jam</a>,
+<a href="https://itch.io/jam/list-jam">List Jam</a>, <a href="https://itch.io/jam/alternative-ecologies-jam">Alternative Ecologies Jam</a> which have deeply inspired me and
+also motivated the creation of this tool.</p>
+<p><strong>Max</strong>, <strong>Jazz</strong>, <strong>Ludonaut</strong> for early testing and bug reports.</p>
+
+      </div>
+      <div class="sidebar-page" data-tab-body="sidebar/board">
+        <div class="sidebar-header">
+          <details id="saved-boards" open="">
+            <summary> 
+              <h2>switch board</h2>
+            </summary>
+            <div class="sidebar-group">
+              <div></div>
+              <div class="button-row">
+                <button data-action="global/new">new board</button>
+                <button data-action="global/import">import board</button>
+              </div>
+              <select size="12" data-path="global/saves"><option value="QL-vJBAzwxQ1caA8zxg9K">new project (10/17/2026)</option></select>
+              <div class="button-row">
+                <button data-action="global/saves/load">load</button>
+                <button data-action="global/saves/duplicate">duplicate</button>
+                <button data-action="global/saves/delete">delete</button>
+              </div>
+            </div>
+          </details>
+        </div>
+        <div class="sidebar-panel">
+          <h2>title</h2>
+          <div class="button-row">
+            <input type="text" data-path="global-editor/title">
+          </div>
+          <h2>initial card focus</h2>
+          <p>copy the id of a card selection and paste it here to set where the viewer starts in the board</p>
+          <div class="button-row">
+            <input type="text" data-path="global-editor/focus">
+            <button class="shrink" data-action="global/center-focus">🔍</button>
+          </div>
+          <h2>background color</h2>
+          <div class="button-row">
+            <input type="color" data-path="global-editor/style/background-color">
+          </div>
+          <h2>publish</h2>
+          <div class="button-column">
+            <button data-action="project/export/html" title="export to standalone webpage">📦 export to html</button>
+            <button data-action="project/publish/neocities" title="export html directly to neocities website">😻 publish to neocities</button>
+            <button id="neocities-view" data-action="project/publish/neocities/view" title="view exported neocities page" disabled="">👀 view on neocities</button>
+          </div>
+        </div>
+      </div>
+      <div class="sidebar-page" data-tab-body="sidebar/styles" hidden="">
+        <div class="sidebar-header">
+          <div class="button-row">
+            <select data-path="global-editor/card-styles/selected"><option value="STYLE-HEADING">heading</option><option value="STYLE-GRID">grid</option><option value="STYLE-TERMINAL">terminal</option><option value="EeMLC4dJM4-iD3bhd2BWk">disabled</option><option value="yrKZvizTDGthzyGX_AA-X">heading 2</option><option value="1HQnPB8fc0zpeLqCCGokQ">context</option><option value="CyZclJHl2fVSpLw53gn1Q">information</option><option value="vc_VZePmvF5KufvjyQGuX">prompt</option></select>
+            <button data-action="global-editor/card-style/new">new style</button>
+          </div>
+        </div>
+        <div class="sidebar-panel">
+          <h2>name</h2>
+          <div class="button-row">
+            <input type="text" data-path="global-editor/card-styles/selected/name">
+          </div>
+          <div id="card-style-fields"><h2>text</h2><div class="settings-grid"><input type="checkbox" class="check"><span>font</span><select disabled=""><option value="default">default</option><option value="monospace">monospace</option><option value="serif">serif</option><option value="sans-serif">sans-serif</option><option value="cursive">cursive</option></select><input type="checkbox" class="check"><span>size</span><input type="range" min="8" max="64"><input type="checkbox" class="check"><span>color</span><input type="color" disabled=""><input type="checkbox" class="check"><span>center</span></div><h2>card</h2><div class="settings-grid"><input type="checkbox" class="check"><span>color</span><input type="color"><input type="range" min="0" max="255"></div></div>
+          <h2>custom css</h2>
+          <textarea data-path="global-editor/card-styles/selected/custom-css"></textarea>
+          <div class="button-row">
+            <button data-action="global-editor/card-style/selected/duplicate">duplicate style</button>
+            <button data-action="global-editor/card-style/selected/delete" data-path="global-editor/card-style/selected/delete">delete style</button>
+          </div>
+        </div>
+      </div>
+      <div class="sidebar-page" data-tab-body="sidebar/selection" hidden="">
+        <div hidden="">
+          <button data-tab-toggle="sidebar/selection/none" data-tab-default="" class="active"></button>
+          <button data-tab-toggle="sidebar/selection/cards" class=""></button>
+          <button data-tab-toggle="sidebar/selection/group"></button>
+          <button data-tab-toggle="sidebar/selection/link" class=""></button>
+        </div>
+        <div class="sidebar-page" data-tab-body="sidebar/selection/none">
+          <div class="sidebar-header">nothing selected</div>
+        </div>
+        <div class="sidebar-page" data-tab-body="sidebar/selection/cards" hidden="">
+          <div class="sidebar-header">
+            <div><span data-path="selection/prompt">no cards selected</span></div>
+            <div class="button-row">
+              <button data-action="selection/cancel">deselect</button>
+              <button data-action="selection/copy-id">copy id</button>
+              <button data-action="selection/link" data-path="selection/link">link</button>
+              <button data-action="selection/group" data-path="selection/group" hidden="">group</button>
+              <button data-action="selection/delete">delete</button>
+            </div>
+          </div>
+          <div class="sidebar-panel">
+            <div class="sidebar-group" data-path="card-editor/text" hidden="">
+              <h2>text</h2>
+              <div class="button-row">
+                <button data-action="card-editor/text/bold">bold</button>
+                <button data-action="card-editor/text/italic">italic</button>
+                <button data-action="card-editor/text/strike">strike</button>
+                <button data-action="card-editor/text/header">header</button>
+              </div>
+              <textarea data-path="card-editor/text/value" spellcheck="true"></textarea>
+            </div>
+            <div class="sidebar-group" data-path="card-editor/icons" hidden="">
+              <h2>icons</h2>
+              <div id="card-editor-icons">
+                <input class="icon-select" data-path="card-editor/icons/1/icon" type="text">
+                <input class="icon-action" data-path="card-editor/icons/1/action" type="text">
+                <input class="icon-select" data-path="card-editor/icons/2/icon" type="text">
+                <input class="icon-action" data-path="card-editor/icons/2/action" type="text">
+                <input class="icon-select" data-path="card-editor/icons/3/icon" type="text">
+                <input class="icon-action" data-path="card-editor/icons/3/action" type="text">
+                <input class="icon-select" data-path="card-editor/icons/4/icon" type="text">
+                <input class="icon-action" data-path="card-editor/icons/4/action" type="text">
+              </div>
+            </div>
+            <div class="sidebar-group" data-path="card-editor/style" hidden="">
+              <h2>style</h2>
+              <select data-path="card-editor/styles" size="3"><option value="default">default</option><option value="STYLE-HEADING">heading</option><option value="STYLE-GRID">grid</option><option value="STYLE-TERMINAL">terminal</option><option value="EeMLC4dJM4-iD3bhd2BWk">disabled</option><option value="yrKZvizTDGthzyGX_AA-X">heading 2</option><option value="1HQnPB8fc0zpeLqCCGokQ">context</option><option value="CyZclJHl2fVSpLw53gn1Q">information</option><option value="vc_VZePmvF5KufvjyQGuX">prompt</option></select>
+              <div class="button-row">
+                <button data-action="card-editor/styles/edit">edit</button>
+              </div>
+            </div>
+            <div class="sidebar-group" data-path="card-editor/image" hidden="">
+              <h2>image</h2>
+              <div class="button-row">
+                <button data-action="card-editor/image/upload">upload image</button>
+                <button data-action="card-editor/image/remove">remove image</button>
+              </div>
+              <textarea data-path="card-editor/image/alt" placeholder="alt text" spellcheck="true"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-page" data-tab-body="sidebar/selection/group" hidden="">
+          <div class="sidebar-header">
+            <div data-path="group/prompt">1 group selected</div>
+            <div class="button-row">
+              <button data-action="group/deselect">deselect</button>
+              <button data-action="group/select">select cards</button>
+              <button data-action="group/delete">ungroup</button>
+            </div>
+          </div>
+          <div class="sidebar-panel">
+            <h2>color</h2>
+            <input type="color" data-path="group/color">
+          </div>
+        </div>
+        <div class="sidebar-page" data-tab-body="sidebar/selection/link" hidden="">
+          <div class="sidebar-header">
+            <div data-path="link/prompt">1 link selected</div>
+            <div class="button-row">
+              <button data-action="link/deselect">deselect</button>
+              <button data-action="link/select">select cards</button>
+              <button data-action="link/delete">unlink</button>
+            </div>
+          </div>
+          <div class="sidebar-panel">
+            <h2>color</h2>
+            <input type="color" data-path="link/color">
+          </div>
+        </div>
+      </div>
+    </div>
+    <script id="project-data" type="text/json">{"details":{"id":"QL-vJBAzwxQ1caA8zxg9K","title":"new project","name":"project","focus":""},"cards":[{"id":"V2VDC2iDTM5PEr31noXq-","position":{"x":1408,"y":-240},"size":{"x":7,"y":11},"text":"[freeze1.html]\nYou freeze before the dragon trapped on the forest floor, unable to decide what the best course of action is. Surprisingly, it does not call upon the hellfire in its belly to smite you. \n\nAfter a long moment where both you and the dragon stare at each other, unmoving, the dragon breaks its gaze and continues its struggle. Since you have decided to be neither its savior nor its slayer, it can only rely upon its own power to live or die. \n\nYou watch and do nothing as it writhes helplessly against its binds. You stand aside as the chains bite into its flesh, cutting deeper and deeper. Dragon blood stains the dirt beneath it, and still it struggles. \n\nAt first it had struggled silently, but now it makes a noise akin to a whimpering dog. It's energy is now mostly spent, its struggle proved pointless. Now it lays still, making wounded noises.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"STYLE-HEADING"},{"id":"uBja5Tv7ySN2d1kbQ8hS1","position":{"x":1536,"y":800},"size":{"x":2,"y":2},"text":"Silence it with your sword.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"K82ntkQEll2Pxe90HjGmm","position":{"x":1152,"y":800},"size":{"x":2,"y":2},"text":"Gag it.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"H5Y-5x7Eg0-l6is95TzHY","position":{"x":1920,"y":800},"size":{"x":2,"y":2},"text":"Walk away.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"NJ7DD0trhDuI00S4lCkt3","position":{"x":2432,"y":800},"size":{"x":2,"y":2},"text":"Free it. (text changes to \"Regret.\" on hover, have both texts in HTML with different classes and in CSS change display settings for both on hover)","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"mVU6K-21WTIg272BW2KrD","position":{"x":1408,"y":1040},"size":{"x":2,"y":6},"text":"[freeze2B.html]\nYou draw your sword from it's sheath and walk towards the dragon. It notices your approach and the blade in your hand. It struggles with renewed fervor.\n\nYou see a dim glow rising from its stomach, but the dragon is too late if it wants to roast you alive. You've already reached it and slashed its throat with your sword.\n\nDo you feel brave yet, little knight?","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"EeMLC4dJM4-iD3bhd2BWk"},{"id":"wi3-_x_VvI9MwAumuBPcl","position":{"x":1024,"y":1040},"size":{"x":2,"y":10},"text":"[freeze2A.html]\nYou quickly grow weary of the noise it makes. There is a  cloak around your shoulders. It was awarded to you on the same day of your knighting, to symbolize the honor and chivalry that all knights stand for.\n\nYou unclasp it and walk towards the dragon. You go to shove the cloak down the dragons throat to shut it up, but when you try the dragons teeth clamp around your arm!\n\nYou try to pull free, but the dragons bite is unyielding. You are as likely to drag the moon from the sky as you are to get the dragon to release its jaw.\n\nYou cannot escape the dragon. The dragon cannot escape the trap. What a dilemma.\n\nI'm afraid you're not getting out of this one, little knight. \n\nTry again?\n","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"EeMLC4dJM4-iD3bhd2BWk"},{"id":"SGqBAKyxO0DcvWXB6qraI","position":{"x":2048,"y":960},"size":{"x":3,"y":12},"text":"[freeze2C.html]\nYou tear your eyes away from the dragon and turn to walk away. It's not your problem. Why should <em>you</em> have to be the one to make a choice?\n\nYou make it barely three steps before something large charges at you hits you head-on. You fall to the ground with a wheeze.\n\nWas that a <em>deer</em>? It was! A buck just charged directly at you and&mdash;\n\nAh. And impaled you quite deeply with his antlers.\n\nOh <em>deer</em>, you seem to be losing quite a lot of blood! \n\n...What, not in the mood to appreciate a narrators puns? Fine, fine.\n\nThe buck seems to be turning back&mdash;and now he's stomping on you with his hooves. Ouch.\n\nYou <em>do</em> remember hearing rumors that the wildlife in this forest are unusually hostile, but you had been a bit distracted looking for the fire-breathing dragon to pay them much mind.\n\nReally, this is your own fault for not taking this forest as a serious threat in the first place.\n\nAre you even listening to me any more? \n\n...\n\nWell, there's no helping it, you are in pretty rough shape.\n\nTry again?","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"EeMLC4dJM4-iD3bhd2BWk"},{"id":"dT1-XQcd_6cqqX68iVpZW","position":{"x":2560,"y":1040},"size":{"x":2,"y":7},"text":"[freeze2D.html]\n(replicate freeze1.html but without the free option)\n\nWhat? Oh, sorry, did you want to free the dragon now? Why? Didn't you already make your choice? Your choice not to choose? Are knights really so uncommitted these days? You can't just change the past on a whim, little knight!\n\nCome on, now, you need to pick something else or this story will never move forward!\n\n(redirect to freeze2A, 2B, and 2C; \"Free it\" is greyed out)","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"EeMLC4dJM4-iD3bhd2BWk"},{"id":"rtVvht2Cy6RSMNfSS0C_A","position":{"x":1408,"y":2000},"size":{"x":2,"y":2},"text":"Yes.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"x1SJH5LGZ-0rVo4uiocji","position":{"x":512,"y":880},"size":{"x":2,"y":2},"text":"Try again >> No.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"qir4ihPeT3LCZpINRoUxT","position":{"x":512,"y":1120},"size":{"x":2,"y":2},"text":"[freeze3A.html]\n\nCongratulations! You died!🥳 Shame it ended so soon, but this is, technically, an ending.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"EeMLC4dJM4-iD3bhd2BWk"},{"id":"aAy-54EVN2NLqFJfcQXBq","position":{"x":896,"y":2160},"size":{"x":2,"y":2},"text":"[freeze3B.html]\nReplicate 3B but mention method of death\n\n(Use same choice branches under 3B unless specified)","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"CyZclJHl2fVSpLw53gn1Q"},{"id":"PMi7IlnYwkrYxt-2hGG9-","position":{"x":2176,"y":2000},"size":{"x":2,"y":2},"text":"Yes.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"Hv8aGSRXs9GfmK6sZXohC","position":{"x":2176,"y":2160},"size":{"x":2,"y":2},"text":"[freeze3D.html]\nReplicate 3B but mention method of death\n\n(Use same choice branches under 3B unless specified)","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"CyZclJHl2fVSpLw53gn1Q"},{"id":"BBLfDdw2kGT_BjJ_C3nvl","position":{"x":896,"y":2480},"size":{"x":2,"y":2},"text":"Gag it.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"vn3mWurjgiMtcmiwtOM7G","position":{"x":-896,"y":2480},"size":{"x":2,"y":2},"text":"Gag it.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"LeiuxNYEhEjPUHRAl6jJ3","position":{"x":-384,"y":2480},"size":{"x":2,"y":2},"text":"Silence it with your sword.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"lC1VIlvJWRfSJcIwyKn6l","position":{"x":128,"y":2480},"size":{"x":2,"y":2},"text":"Walk away.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"V18cTGjgEYqNmOfopQCEg","position":{"x":896,"y":2000},"size":{"x":2,"y":2},"text":"Yes.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"tGrUyLY6M7-syeuKrSnVE","position":{"x":1408,"y":2160},"size":{"x":2,"y":2},"text":"[freeze3C.html]\nReplicate 3B but mention method of death\n\n(Use same choice branches under 3B unless specified)","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"CyZclJHl2fVSpLw53gn1Q"},{"id":"gA0acyiJhS8i5y06ErMky","position":{"x":-768,"y":1840},"size":{"x":7,"y":6},"text":"[freeze3E.html]\nYou freeze before the dragon trapped on the forest floor, unable to decide what the best course of action is. Surprisingly&mdash;wait...\n\nHave you been here before? \n\nNo, no, can't have. What a weird moment to get deja vu. Well, moving on.\n\nAfter a long moment where both you and the dragon stare at each other, unmoving, the dragon breaks its gaze and continues its struggle. Since you have decided to be neither its savior nor its slayer, it can only rely upon its own power to live or die. \n\nYou watch and do nothing as it writhes helplessly against its binds. You stand aside as the chains bite into its flesh, cutting deeper and deeper. Dragon blood stains the dirt beneath it, and still it struggles. \n\nAt first it had struggled silently, but now it makes a noise akin to a whimpering dog. It's energy is now mostly spent, its struggle proved pointless. Now it lays still, making wounded noises.\n\nYou are faced with a strangely familiar choice. \nOr...<em>almost</em> familiar.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"EeMLC4dJM4-iD3bhd2BWk"},{"id":"K7Loh9FqWAqoR880uVOCl","position":{"x":1408,"y":1600},"size":{"x":2,"y":2},"text":"Return victorious!","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"E9qOVnHnsgj16J8muTiWJ","position":{"x":1664,"y":1600},"size":{"x":2,"y":2},"text":"Return regretful.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"807bJ_75omoDR9iqRro21","position":{"x":1408,"y":1760},"size":{"x":2,"y":2},"text":"[freeze2E.html]\nSimilar to 2C but grinning when you turn around","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"EeMLC4dJM4-iD3bhd2BWk"},{"id":"CHBGYPfBVDbYNMclex3xM","position":{"x":1664,"y":1760},"size":{"x":2,"y":2},"text":"[freeze2F.html]\nSimilar to 2C but more melancholy when you turn around","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"EeMLC4dJM4-iD3bhd2BWk"},{"id":"NvMKqr5ppHWdlrEgXDbPl","position":{"x":2176,"y":2480},"size":{"x":2,"y":2},"text":"Run away (replaces \"Walk away\" option)","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"vK3GZ81n0Cv1M501gAwOV","position":{"x":1408,"y":2480},"size":{"x":2,"y":2},"text":"Silence it with your sword","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"oaCVYRU7BIkpxEiP7utWn","position":{"x":640,"y":2480},"size":{"x":2,"y":2},"text":"Silence w sword redirects to 2B","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"aMO4U8ygK38vdRhmALP7w","position":{"x":896,"y":2640},"size":{"x":2,"y":3},"text":"freeze4D\nDecide to use the sword instead since trying to gag it didn't turn out so well for you last time.\n\nAre you sure?","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"CyZclJHl2fVSpLw53gn1Q"},{"id":"viog9mAu5N2ibtCtOlFdg","position":{"x":1408,"y":2640},"size":{"x":2,"y":2},"text":"4E\n(Mostly the same as 2B)\nYou approach the dragon with your blade drawn.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"CyZclJHl2fVSpLw53gn1Q"},{"id":"UYMh93W3fb5B_hX6ZJrS8","position":{"x":1408,"y":3200},"size":{"x":2,"y":2},"text":"Kill it","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"G3kc6A0qc8HQWt4sb7ZQr","position":{"x":2176,"y":2640},"size":{"x":2,"y":4},"text":"4F\nYou run, dodging the buck.\nQuickly find yourself lost in the half-dead forest. Wonder why there was a trap for the dragon in the first place. The only people willing to go in this forest are knights, but knights aren't supposed to use underhanded tactics like traps outside of active warfare.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"CyZclJHl2fVSpLw53gn1Q"},{"id":"b_ev-5AW71HCXXd5nX5CI","position":{"x":256,"y":2640},"size":{"x":2,"y":2},"text":"4C\n(mostly the same a 2C, slightly different death, more comments from Narrator)","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"style":"EeMLC4dJM4-iD3bhd2BWk","alttext":""},{"id":"Zp82hHMZZbbMvAhf-_r6-","position":{"x":-384,"y":2640},"size":{"x":2,"y":2},"text":"4B\n(Mostly the same as 2B, slightly different death, more comments from Narrator)","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"style":"EeMLC4dJM4-iD3bhd2BWk","alttext":""},{"id":"wEuPvxABwg4GBJCCVpHgv","position":{"x":-1024,"y":2640},"size":{"x":2,"y":3},"text":"4A\n(mostly a copy of 2A)\n\"Such a shame that the dragon's painful cries are too much for the poor little knight to hear. I wonder if you'd like to try being in its place one of these turns? Oh well, something to consider.\"","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"style":"EeMLC4dJM4-iD3bhd2BWk","alttext":""},{"id":"re1RtqPzdN0V4LoJCYOKc","position":{"x":2432,"y":2960},"size":{"x":2,"y":2},"text":"Go to the capital to find answers.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"GuLTfwdolc_c4nH2HdfKz","position":{"x":2048,"y":2960},"size":{"x":2,"y":2},"text":"Investigate the forest.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"l02sGoPQgE7qUueiLI-b_","position":{"x":1664,"y":2800},"size":{"x":2,"y":2},"text":"Hesitate","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"style":"vc_VZePmvF5KufvjyQGuX","alttext":""},{"id":"wWLgPxYZoMHMFaxJhEYsJ","position":{"x":1920,"y":2800},"size":{"x":2,"y":2},"text":"4G\n(parallel to 4F)\nYou reconsider, turn and leave the dragon there to struggle, run into the forest.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"CyZclJHl2fVSpLw53gn1Q"},{"id":"3jtgiTbkItMYBKLaAWtJ2","position":{"x":1408,"y":3360},"size":{"x":2,"y":2},"text":"5A\nYou slice through the dragons throat.\nIts molten blood begins eating through your sword like acid.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"CyZclJHl2fVSpLw53gn1Q"},{"id":"inT3xZno-ZkD4nF4eWrxE","position":{"x":2048,"y":3120},"size":{"x":2,"y":2},"text":"5D\nFind many other types of traps, accidentally trigger one that kills you\nTry again?","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"style":"CyZclJHl2fVSpLw53gn1Q","alttext":""},{"id":"2knC9Ndl6WnTjfVllCvbY","position":{"x":2432,"y":3120},"size":{"x":2,"y":3},"text":"5E\nFind evidence of deliberate extermination of dragons, no record of dragons ever actually stealing a princess, feel something stab the back of your neck","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"style":"CyZclJHl2fVSpLw53gn1Q","alttext":""},{"id":"NfoD7WfOTaFBqnJBcz54B","position":{"x":128,"y":-560},"size":{"x":2,"y":2},"text":"First loop","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"EeMLC4dJM4-iD3bhd2BWk"},{"id":"0Tdzkang_6Uv2Pt7SwQfv","position":{"x":128,"y":-400},"size":{"x":2,"y":2},"text":"Second loop - variation, build off first loop","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"EeMLC4dJM4-iD3bhd2BWk"},{"id":"t90YbS--eYyP_CtWIQJTO","position":{"x":128,"y":-240},"size":{"x":2,"y":2},"text":"Third loop - no escape, first direct interactions with narrator, no longer have the choice to NOT \"try again\"","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"1HQnPB8fc0zpeLqCCGokQ"},{"id":"yUtJhdxj4ZhZ3ocThCK4B","position":{"x":128,"y":-80},"size":{"x":2,"y":2},"text":"Fourth loop - judgement from narrator","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"1HQnPB8fc0zpeLqCCGokQ"},{"id":"_mi-tHbFgrChEuuIok7Pw","position":{"x":128,"y":80},"size":{"x":2,"y":2},"text":"True ends","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"L_B7eD_ngd8_Y2ZS0-gNI","position":{"x":384,"y":240},"size":{"x":2,"y":2},"text":"\"Walk away\" end - Knight continuously refuses to participate in hurting the dragon again, narrator gives knight a chance to save the dragon","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"1HQnPB8fc0zpeLqCCGokQ"},{"id":"e9TvWAksh4XdEJinKQhHc","position":{"x":128,"y":240},"size":{"x":2,"y":3},"text":"\"Sword\" end - Knight keeps choosing avoidant, selfish options. Narrator traps them in an eternal loop being tortured by being trapped in the same chains as the dragon that slowly tighten until the knight dies.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"1HQnPB8fc0zpeLqCCGokQ"},{"id":"VkHFxD4uM8A0hBSpHeHQq","position":{"x":-128,"y":240},"size":{"x":2,"y":5},"text":"Other end ideas:\n- Knight is left to wander the forest forever\n- Knight turned into a dragon\n- Knight driven insane, stumbles back to the capital but finds he no longer understands people and willingly returns to the forest \n-Knight and dragon trapped in a cave together, don't move and just watch each other slowly die","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"1HQnPB8fc0zpeLqCCGokQ"},{"id":"iilb-cwLPC1K5ErJjV2LD","position":{"x":-1280,"y":2880},"size":{"x":2,"y":2},"text":"Be quick","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"PfCNkKpc6e2yGMrJeJu43","position":{"x":-896,"y":2960},"size":{"x":2,"y":2},"text":"Be sneaky","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"ktgoIr9GJ4MqLqOZOE2UL","position":{"x":-1280,"y":3040},"size":{"x":2,"y":6},"text":"5B\nWithout another moment's thought, you fling off your cape and lunge at the dragon in a single motion. You reach out to shove the cape into the dragon's mouth&emdash;\nExcept the dragon's mouth is closed. You try to pry it open, with no luck. The dragon gives you an unimpressed look and huffs a hot plume of smoke in your face.\nBefore you can make another move, the dragon opens its jaw wide and blasts you point-blank with a wave white-hot fire breath.\nTry again?","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"style":"EeMLC4dJM4-iD3bhd2BWk","alttext":""},{"id":"oHYSpj1ghQQir_9T4B1rW","position":{"x":-896,"y":3120},"size":{"x":2,"y":4},"text":"5C\nYou slink back and hide in the shadows, walking around the dragon and sneaking up behind it. Fail to notice dragon's ears still tracking you, get killed by the dragons tail.\nTry again?","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"style":"EeMLC4dJM4-iD3bhd2BWk","alttext":""},{"id":"HtcSb1fkUWh6OjBEZuy3F","position":{"x":-1280,"y":3520},"size":{"x":2,"y":2},"text":"Yes","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"style":"vc_VZePmvF5KufvjyQGuX","alttext":""},{"id":"qqvmKEuCOjYtJ0qe7OpVT","position":{"x":-896,"y":3520},"size":{"x":2,"y":2},"text":"Yes","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"style":"vc_VZePmvF5KufvjyQGuX","alttext":""},{"id":"SfGyPHGKY8dT90lXxeh1l","position":{"x":2304,"y":3600},"size":{"x":2,"y":2},"text":"Yes","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"style":"vc_VZePmvF5KufvjyQGuX","alttext":""},{"id":"gKIrNaR3EL0OzIAAcUPtz","position":{"x":1408,"y":3600},"size":{"x":2,"y":2},"text":"Yes","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"ysvJzSPzwP4g8rRrSqQgs","position":{"x":512,"y":1440},"size":{"x":2,"y":2},"text":"Try again >> No.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"eJSSDS0C_ysdAxGctMwyA","position":{"x":512,"y":1680},"size":{"x":2,"y":2},"text":"6A","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"EeMLC4dJM4-iD3bhd2BWk"},{"id":"QZDEPAzzfysODF9vTlhMf","position":{"x":-768,"y":3840},"size":{"x":7,"y":5},"text":"6B\nYou've been here before\n\n...\n\nYou freeze before the dragon trapped on the forest floor, unable to decide what the best course of action is. Surprisingly, it does not call upon the hellfire in its belly to smite you. \n\nAfter a long moment where both you and the dragon stare at each other, unmoving, the dragon breaks its gaze and continues its struggle. Since you have decided to be neither its savior nor its slayer, it can only rely upon its own power to live or die. \n\nYou watch and do nothing as it writhes helplessly against its binds. You stand aside as the chains bite into its flesh, cutting deeper and deeper. Dragon blood stains the dirt beneath it, and still it struggles. \n\nAt first it had struggled silently, but now it makes a noise akin to a whimpering dog. It's energy is now mostly spent, its struggle proved pointless. Now it lays still, making wounded noises.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"EeMLC4dJM4-iD3bhd2BWk"},{"id":"GoGKG7tuo-VW5GP1Zrbb1","position":{"x":1408,"y":4080},"size":{"x":2,"y":2},"text":"6C (copy of 6B)\nNarrator noticeably antagonistic towards you","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"CyZclJHl2fVSpLw53gn1Q"},{"id":"RLyyPkwgEIuO6j3QNyeJE","position":{"x":-384,"y":3440},"size":{"x":2,"y":2},"text":"Yes.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"style":"vc_VZePmvF5KufvjyQGuX","alttext":""},{"id":"bc04RkHyKAbxr5qiR9JTJ","position":{"x":256,"y":2960},"size":{"x":2,"y":2},"text":"Yes.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"style":"vc_VZePmvF5KufvjyQGuX","alttext":""},{"id":"GbfReqslKxr_sdNXbRIQb","position":{"x":1408,"y":4320},"size":{"x":2,"y":2},"text":"Kill it.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"nb8-FsDUM_4Mz_cpYw21u","position":{"x":2304,"y":4080},"size":{"x":2,"y":2},"text":"6D (copy of 6B)\nNarrator is thoughtful, asks you what you'll do now.\n(no gag option)","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"CyZclJHl2fVSpLw53gn1Q"},{"id":"MgH6d6S3CWGe4k7_478OR","position":{"x":2560,"y":4320},"size":{"x":2,"y":2},"text":"Throw down your sword and walk away.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"foPHbVxMiLGwNbSJGOCZw","position":{"x":-1024,"y":4320},"size":{"x":2,"y":2},"text":"Gag it","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"FJk5u8jAYUFF_rD5ZX3on","position":{"x":-512,"y":4320},"size":{"x":2,"y":2},"text":"Silence it with your sword.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"CX8eguG3F51h6MavC8-3d","position":{"x":0,"y":4320},"size":{"x":2,"y":2},"text":"Walk away.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"hcJ9tRVsnRrgEOq-qdsDr","position":{"x":2816,"y":4320},"size":{"x":2,"y":2},"text":"~~Free the dragon~~","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"-RQGNOGcuJeec8n3xSrmn","position":{"x":2304,"y":4320},"size":{"x":2,"y":2},"text":"Kill the dragon.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"OQ8CirL_vDJlYgm5UrCxn","position":{"x":2304,"y":4560},"size":{"x":2,"y":2},"text":"7E\nNarrator rages at you, the narrative breaks apart around you.\n\nEND","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"1HQnPB8fc0zpeLqCCGokQ"},{"id":"DuTPn_PsY4ejoSLNtsFpD","position":{"x":3328,"y":4800},"size":{"x":2,"y":8},"text":"8A\nNarrator goes quiet, questions if you really want to help.\n\"None of us can choose our roles. I can't stop the dragon from getting trapped. The dragon can't avoid you. The knight can't be anything but a knight with a sword. But I can choose what kind of story this is. The dragon can choose to be meek or fierce. The knight can choose to kill or free the dragon, or choose not to choose at all. But inaction is not a neutral choice, little knight. Do you really want to help the dragon? Perhaps...if you mean it, if we work together, we can move beyond our roles.\nAlright. One more time...\nTry again?\"\n(Only \"Yes\" option)","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"CyZclJHl2fVSpLw53gn1Q"},{"id":"vdAuBA0hhgEvvRpnQDKdu","position":{"x":3328,"y":4560},"size":{"x":2,"y":2},"text":"7F\nYou approach the dragon and try to break the chains, but you can't. You instead keep the dragon quiet company as it dies.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"CyZclJHl2fVSpLw53gn1Q"},{"id":"HORrxLYwlIZ53ipwxyWcA","position":{"x":1408,"y":4560},"size":{"x":2,"y":2},"text":"7D\nYou approach the dragon with your sword drawn, as you raise it to kill the dragon you pass out","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"CyZclJHl2fVSpLw53gn1Q"},{"id":"aHvXqxtiVpIMokWHhzCLu","position":{"x":-1152,"y":4560},"size":{"x":2,"y":2},"text":"7A","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"style":"EeMLC4dJM4-iD3bhd2BWk","alttext":""},{"id":"kNZjDdwXqPTFnjueCEznC","position":{"x":-512,"y":4560},"size":{"x":2,"y":2},"text":"7B","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"style":"EeMLC4dJM4-iD3bhd2BWk","alttext":""},{"id":"1z7Nh0LynlkIz55p18GjH","position":{"x":128,"y":4560},"size":{"x":2,"y":2},"text":"7C\nGround collapses into a sinkhole/cave, trapped with the dragon.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"style":"EeMLC4dJM4-iD3bhd2BWk","alttext":""},{"id":"95hbM4EJqcwuxef6DNxQu","position":{"x":3328,"y":5520},"size":{"x":2,"y":2},"text":"Yes","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"xuE9h0TzQmUrxmEyZ-mCu","position":{"x":2560,"y":4560},"size":{"x":2,"y":2},"text":"\"...Why do you keep walking away?\"","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"CyZclJHl2fVSpLw53gn1Q"},{"id":"wxB0NjK8Eow7zZVH0vSAD","position":{"x":2560,"y":4720},"size":{"x":2,"y":2},"text":"I don't want to be cruel.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"lL56v1jJ4O1lrTlnqYEVR","position":{"x":2560,"y":4880},"size":{"x":2,"y":2},"text":"You don't think leaving the dragon to suffer is cruel? You're still condemning the dragon to death, just a slower one.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"CyZclJHl2fVSpLw53gn1Q"},{"id":"v9-tA68WtY4uG0AVQK2Mu","position":{"x":2560,"y":5040},"size":{"x":2,"y":2},"text":"I haven't exactly been given a lot of options, here.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"2JksFPy2wmZUbGObxrSGG","position":{"x":2560,"y":5200},"size":{"x":2,"y":4},"text":"...True.\nI thought you deserved to suffer for your original choice. I thought you cowardly for choosing inaction. I didn't want you to simply choose to free the dragon out of fear now that you knew you would die and escape consequences for leaving the dragon to its fate.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"CyZclJHl2fVSpLw53gn1Q"},{"id":"wwjDvvkkdPlF6YUBE9_8S","position":{"x":1408,"y":4720},"size":{"x":2,"y":2},"text":"Wake up","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"Vqmf7ZmX7DoXQaVkgAvii","position":{"x":1408,"y":4880},"size":{"x":2,"y":3},"text":"You find yourself transformed into a dragon, you stumble around in your new body, get trapped, and try to escape. A knight approaches you and watches you struggle before turning and leaving. You slowly bleed out.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"CyZclJHl2fVSpLw53gn1Q"},{"id":"nUA3uxsC8fp1cgg0vA4q4","position":{"x":1408,"y":5120},"size":{"x":2,"y":2},"text":"Wake up","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"Gkw_vFk0d-nvCrcys-OTb","position":{"x":1408,"y":5280},"size":{"x":2,"y":2},"text":"Repeat, with being killed three times, cycle continues to repeat.\n\nEND","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"1HQnPB8fc0zpeLqCCGokQ"},{"id":"1DYlseoWFIL1J2F1viJY0","position":{"x":256,"y":5200},"size":{"x":2,"y":2},"text":"You and the dragon end up trapped in a cave together for eternity, slowly wasting away but never dying.\n\nEND","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"1HQnPB8fc0zpeLqCCGokQ"},{"id":"Uof8igBlzlcwLx06g2VAT","position":{"x":-1280,"y":5600},"size":{"x":2,"y":2},"text":"Lost in the forest forever\n\nEND","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"1HQnPB8fc0zpeLqCCGokQ"},{"id":"Ec4rQ56VHJv3U_LynVVNm","position":{"x":-512,"y":5360},"size":{"x":2,"y":3},"text":"Return to the capital, praised as a hero, slowly driven insane by voices of the forest, doesn't understand people anymore, returns to the forest to become one of the lost spirits.\n\nEND","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"1HQnPB8fc0zpeLqCCGokQ"},{"id":"b4Cu9Yy2Gcjr6GLXwKqsk","position":{"x":-128,"y":2880},"size":{"x":2,"y":2},"text":"Don't turn around.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"XMZhKSYZoMERa_SivlRka","position":{"x":-512,"y":2880},"size":{"x":2,"y":2},"text":"Turn around.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"Xzrdn8Iw6lGiaiE9i-e4x","position":{"x":-512,"y":3040},"size":{"x":2,"y":2},"text":"5F\n Don't turn around. Don't turn around. Don't turn around. Don't turn around. Don't turn around. Don't turn around.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"style":"EeMLC4dJM4-iD3bhd2BWk","alttext":""},{"id":"ZrjCApiMvYBldIecV70tv","position":{"x":-128,"y":3200},"size":{"x":2,"y":2},"text":"5G\nCreepy :)","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"style":"EeMLC4dJM4-iD3bhd2BWk","alttext":""},{"id":"2H1s3xKAT3MOLVI_6kZyx","position":{"x":-1408,"y":4960},"size":{"x":2,"y":2},"text":"8A","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"EeMLC4dJM4-iD3bhd2BWk"},{"id":"Rt6tKDGgHSMCG4x9OhV-w","position":{"x":-1280,"y":5280},"size":{"x":2,"y":2},"text":"8B\n","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"EeMLC4dJM4-iD3bhd2BWk"},{"id":"jfopSgfbCxyaTo0P68JG6","position":{"x":-1408,"y":4800},"size":{"x":2,"y":2},"text":"Cut the trees with your sword","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"style":"vc_VZePmvF5KufvjyQGuX","alttext":""},{"id":"12DwYiFyx3tZ2jgZNg3me","position":{"x":-1152,"y":5120},"size":{"x":2,"y":2},"text":"Get out of the forest","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"style":"vc_VZePmvF5KufvjyQGuX","alttext":""},{"id":"0NteeQxrkH_WKKMshKz87","position":{"x":-1280,"y":5440},"size":{"x":2,"y":2},"text":"9A-C","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"EeMLC4dJM4-iD3bhd2BWk"},{"id":"sDIHHiNycpXc1YyyYQuB4","position":{"x":-512,"y":4880},"size":{"x":2,"y":2},"text":"Return victorious","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"Ljt6lVvQm_pG543ZkZVh0","position":{"x":-512,"y":5040},"size":{"x":2,"y":2},"text":"8C","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"EeMLC4dJM4-iD3bhd2BWk"},{"id":"6TaTlE6PPe1YdfnY42Im-","position":{"x":0,"y":4800},"size":{"x":2,"y":2},"text":"Try to escape with the dragon.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"HUmvF79Lnch9f1P5keoT1","position":{"x":256,"y":4800},"size":{"x":2,"y":2},"text":"Try to escape on your own.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"vc_VZePmvF5KufvjyQGuX"},{"id":"qB4Iet4BRB_WYamZNTTyv","position":{"x":0,"y":4960},"size":{"x":2,"y":2},"text":"8D\nYou free the dragon, and after a few days of letting its wings heal, you fly out together.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"style":"EeMLC4dJM4-iD3bhd2BWk","alttext":""},{"id":"doA3YkcXQUV-i2Chb1rP0","position":{"x":256,"y":4960},"size":{"x":2,"y":2},"text":"8E\nYou're unable to escape.","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"style":"EeMLC4dJM4-iD3bhd2BWk","alttext":""},{"id":"dcmaWixw7K-X9ct0IS8Jn","position":{"x":0,"y":5200},"size":{"x":2,"y":2},"text":"You and the dragon are now both free, you part ways.\nEND","icons":[{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""},{"icon":"","action":""}],"alttext":"","style":"1HQnPB8fc0zpeLqCCGokQ"}],"groups":[],"links":[{"cardA":"mVU6K-21WTIg272BW2KrD","cardB":"uBja5Tv7ySN2d1kbQ8hS1","color":"black"},{"cardA":"wi3-_x_VvI9MwAumuBPcl","cardB":"K82ntkQEll2Pxe90HjGmm","color":"black"},{"cardA":"SGqBAKyxO0DcvWXB6qraI","cardB":"H5Y-5x7Eg0-l6is95TzHY","color":"black"},{"cardA":"dT1-XQcd_6cqqX68iVpZW","cardB":"NJ7DD0trhDuI00S4lCkt3","color":"black"},{"cardA":"qir4ihPeT3LCZpINRoUxT","cardB":"x1SJH5LGZ-0rVo4uiocji","color":"black"},{"cardA":"SGqBAKyxO0DcvWXB6qraI","cardB":"PMi7IlnYwkrYxt-2hGG9-","color":"black"},{"cardA":"Hv8aGSRXs9GfmK6sZXohC","cardB":"PMi7IlnYwkrYxt-2hGG9-","color":"black"},{"cardA":"aAy-54EVN2NLqFJfcQXBq","cardB":"V18cTGjgEYqNmOfopQCEg","color":"black"},{"cardA":"V18cTGjgEYqNmOfopQCEg","cardB":"wi3-_x_VvI9MwAumuBPcl","color":"black"},{"cardA":"rtVvht2Cy6RSMNfSS0C_A","cardB":"tGrUyLY6M7-syeuKrSnVE","color":"black"},{"cardA":"BBLfDdw2kGT_BjJ_C3nvl","cardB":"aAy-54EVN2NLqFJfcQXBq","color":"black"},{"cardA":"E9qOVnHnsgj16J8muTiWJ","cardB":"mVU6K-21WTIg272BW2KrD","color":"black"},{"cardA":"K7Loh9FqWAqoR880uVOCl","cardB":"mVU6K-21WTIg272BW2KrD","color":"black"},{"cardA":"CHBGYPfBVDbYNMclex3xM","cardB":"E9qOVnHnsgj16J8muTiWJ","color":"black"},{"cardA":"807bJ_75omoDR9iqRro21","cardB":"K7Loh9FqWAqoR880uVOCl","color":"black"},{"cardA":"CHBGYPfBVDbYNMclex3xM","cardB":"PMi7IlnYwkrYxt-2hGG9-","color":"black"},{"cardA":"807bJ_75omoDR9iqRro21","cardB":"rtVvht2Cy6RSMNfSS0C_A","color":"black"},{"cardA":"vK3GZ81n0Cv1M501gAwOV","cardB":"tGrUyLY6M7-syeuKrSnVE","color":"black"},{"cardA":"NvMKqr5ppHWdlrEgXDbPl","cardB":"Hv8aGSRXs9GfmK6sZXohC","color":"black"},{"cardA":"oaCVYRU7BIkpxEiP7utWn","cardB":"aAy-54EVN2NLqFJfcQXBq","color":"black"},{"cardA":"aMO4U8ygK38vdRhmALP7w","cardB":"BBLfDdw2kGT_BjJ_C3nvl","color":"black"},{"cardA":"vn3mWurjgiMtcmiwtOM7G","cardB":"gA0acyiJhS8i5y06ErMky","color":"black"},{"cardA":"LeiuxNYEhEjPUHRAl6jJ3","cardB":"gA0acyiJhS8i5y06ErMky","color":"black"},{"cardA":"lC1VIlvJWRfSJcIwyKn6l","cardB":"gA0acyiJhS8i5y06ErMky","color":"black"},{"cardA":"viog9mAu5N2ibtCtOlFdg","cardB":"UYMh93W3fb5B_hX6ZJrS8","color":"black"},{"cardA":"vK3GZ81n0Cv1M501gAwOV","cardB":"viog9mAu5N2ibtCtOlFdg","color":"black"},{"cardA":"G3kc6A0qc8HQWt4sb7ZQr","cardB":"NvMKqr5ppHWdlrEgXDbPl","color":"black"},{"cardA":"wEuPvxABwg4GBJCCVpHgv","cardB":"vn3mWurjgiMtcmiwtOM7G","color":"black"},{"cardA":"Zp82hHMZZbbMvAhf-_r6-","cardB":"LeiuxNYEhEjPUHRAl6jJ3","color":"black"},{"cardA":"b_ev-5AW71HCXXd5nX5CI","cardB":"lC1VIlvJWRfSJcIwyKn6l","color":"black"},{"cardA":"re1RtqPzdN0V4LoJCYOKc","cardB":"G3kc6A0qc8HQWt4sb7ZQr","color":"black"},{"cardA":"GuLTfwdolc_c4nH2HdfKz","cardB":"G3kc6A0qc8HQWt4sb7ZQr","color":"black"},{"cardA":"UYMh93W3fb5B_hX6ZJrS8","cardB":"aMO4U8ygK38vdRhmALP7w","color":"black"},{"cardA":"l02sGoPQgE7qUueiLI-b_","cardB":"aMO4U8ygK38vdRhmALP7w","color":"black"},{"cardA":"wWLgPxYZoMHMFaxJhEYsJ","cardB":"l02sGoPQgE7qUueiLI-b_","color":"black"},{"cardA":"wWLgPxYZoMHMFaxJhEYsJ","cardB":"GuLTfwdolc_c4nH2HdfKz","color":"black"},{"cardA":"wWLgPxYZoMHMFaxJhEYsJ","cardB":"re1RtqPzdN0V4LoJCYOKc","color":"black"},{"cardA":"3jtgiTbkItMYBKLaAWtJ2","cardB":"UYMh93W3fb5B_hX6ZJrS8","color":"black"},{"cardA":"inT3xZno-ZkD4nF4eWrxE","cardB":"GuLTfwdolc_c4nH2HdfKz","color":"black"},{"cardA":"2knC9Ndl6WnTjfVllCvbY","cardB":"re1RtqPzdN0V4LoJCYOKc","color":"black"},{"cardA":"NfoD7WfOTaFBqnJBcz54B","cardB":"0Tdzkang_6Uv2Pt7SwQfv","color":"black"},{"cardA":"0Tdzkang_6Uv2Pt7SwQfv","cardB":"t90YbS--eYyP_CtWIQJTO","color":"black"},{"cardA":"t90YbS--eYyP_CtWIQJTO","cardB":"yUtJhdxj4ZhZ3ocThCK4B","color":"black"},{"cardA":"yUtJhdxj4ZhZ3ocThCK4B","cardB":"_mi-tHbFgrChEuuIok7Pw","color":"black"},{"cardA":"_mi-tHbFgrChEuuIok7Pw","cardB":"VkHFxD4uM8A0hBSpHeHQq","color":"black"},{"cardA":"e9TvWAksh4XdEJinKQhHc","cardB":"_mi-tHbFgrChEuuIok7Pw","color":"black"},{"cardA":"L_B7eD_ngd8_Y2ZS0-gNI","cardB":"_mi-tHbFgrChEuuIok7Pw","color":"black"},{"cardA":"PfCNkKpc6e2yGMrJeJu43","cardB":"wEuPvxABwg4GBJCCVpHgv","color":"black"},{"cardA":"iilb-cwLPC1K5ErJjV2LD","cardB":"wEuPvxABwg4GBJCCVpHgv","color":"black"},{"cardA":"oHYSpj1ghQQir_9T4B1rW","cardB":"PfCNkKpc6e2yGMrJeJu43","color":"black"},{"cardA":"ktgoIr9GJ4MqLqOZOE2UL","cardB":"iilb-cwLPC1K5ErJjV2LD","color":"black"},{"cardA":"HtcSb1fkUWh6OjBEZuy3F","cardB":"ktgoIr9GJ4MqLqOZOE2UL","color":"black"},{"cardA":"qqvmKEuCOjYtJ0qe7OpVT","cardB":"oHYSpj1ghQQir_9T4B1rW","color":"black"},{"cardA":"SfGyPHGKY8dT90lXxeh1l","cardB":"inT3xZno-ZkD4nF4eWrxE","color":"black"},{"cardA":"eJSSDS0C_ysdAxGctMwyA","cardB":"ysvJzSPzwP4g8rRrSqQgs","color":"black"},{"cardA":"qqvmKEuCOjYtJ0qe7OpVT","cardB":"QZDEPAzzfysODF9vTlhMf","color":"black"},{"cardA":"HtcSb1fkUWh6OjBEZuy3F","cardB":"QZDEPAzzfysODF9vTlhMf","color":"black"},{"cardA":"GoGKG7tuo-VW5GP1Zrbb1","cardB":"gKIrNaR3EL0OzIAAcUPtz","color":"black"},{"cardA":"gKIrNaR3EL0OzIAAcUPtz","cardB":"3jtgiTbkItMYBKLaAWtJ2","color":"black"},{"cardA":"bc04RkHyKAbxr5qiR9JTJ","cardB":"b_ev-5AW71HCXXd5nX5CI","color":"black"},{"cardA":"RLyyPkwgEIuO6j3QNyeJE","cardB":"QZDEPAzzfysODF9vTlhMf","color":"black"},{"cardA":"bc04RkHyKAbxr5qiR9JTJ","cardB":"QZDEPAzzfysODF9vTlhMf","color":"black"},{"cardA":"GbfReqslKxr_sdNXbRIQb","cardB":"GoGKG7tuo-VW5GP1Zrbb1","color":"black"},{"cardA":"SfGyPHGKY8dT90lXxeh1l","cardB":"2knC9Ndl6WnTjfVllCvbY","color":"black"},{"cardA":"nb8-FsDUM_4Mz_cpYw21u","cardB":"SfGyPHGKY8dT90lXxeh1l","color":"black"},{"cardA":"MgH6d6S3CWGe4k7_478OR","cardB":"nb8-FsDUM_4Mz_cpYw21u","color":"black"},{"cardA":"CX8eguG3F51h6MavC8-3d","cardB":"QZDEPAzzfysODF9vTlhMf","color":"black"},{"cardA":"FJk5u8jAYUFF_rD5ZX3on","cardB":"QZDEPAzzfysODF9vTlhMf","color":"black"},{"cardA":"foPHbVxMiLGwNbSJGOCZw","cardB":"QZDEPAzzfysODF9vTlhMf","color":"black"},{"cardA":"hcJ9tRVsnRrgEOq-qdsDr","cardB":"nb8-FsDUM_4Mz_cpYw21u","color":"black"},{"cardA":"-RQGNOGcuJeec8n3xSrmn","cardB":"nb8-FsDUM_4Mz_cpYw21u","color":"black"},{"cardA":"OQ8CirL_vDJlYgm5UrCxn","cardB":"-RQGNOGcuJeec8n3xSrmn","color":"black"},{"cardA":"DuTPn_PsY4ejoSLNtsFpD","cardB":"vdAuBA0hhgEvvRpnQDKdu","color":"black"},{"cardA":"HORrxLYwlIZ53ipwxyWcA","cardB":"GbfReqslKxr_sdNXbRIQb","color":"black"},{"cardA":"aHvXqxtiVpIMokWHhzCLu","cardB":"foPHbVxMiLGwNbSJGOCZw","color":"black"},{"cardA":"kNZjDdwXqPTFnjueCEznC","cardB":"FJk5u8jAYUFF_rD5ZX3on","color":"black"},{"cardA":"1z7Nh0LynlkIz55p18GjH","cardB":"CX8eguG3F51h6MavC8-3d","color":"black"},{"cardA":"95hbM4EJqcwuxef6DNxQu","cardB":"DuTPn_PsY4ejoSLNtsFpD","color":"black"},{"cardA":"xuE9h0TzQmUrxmEyZ-mCu","cardB":"MgH6d6S3CWGe4k7_478OR","color":"black"},{"cardA":"wxB0NjK8Eow7zZVH0vSAD","cardB":"xuE9h0TzQmUrxmEyZ-mCu","color":"black"},{"cardA":"lL56v1jJ4O1lrTlnqYEVR","cardB":"wxB0NjK8Eow7zZVH0vSAD","color":"black"},{"cardA":"v9-tA68WtY4uG0AVQK2Mu","cardB":"lL56v1jJ4O1lrTlnqYEVR","color":"black"},{"cardA":"2JksFPy2wmZUbGObxrSGG","cardB":"v9-tA68WtY4uG0AVQK2Mu","color":"black"},{"cardA":"wwjDvvkkdPlF6YUBE9_8S","cardB":"HORrxLYwlIZ53ipwxyWcA","color":"black"},{"cardA":"Vqmf7ZmX7DoXQaVkgAvii","cardB":"wwjDvvkkdPlF6YUBE9_8S","color":"black"},{"cardA":"nUA3uxsC8fp1cgg0vA4q4","cardB":"Vqmf7ZmX7DoXQaVkgAvii","color":"black"},{"cardA":"Gkw_vFk0d-nvCrcys-OTb","cardB":"nUA3uxsC8fp1cgg0vA4q4","color":"black"},{"cardA":"b4Cu9Yy2Gcjr6GLXwKqsk","cardB":"Zp82hHMZZbbMvAhf-_r6-","color":"black"},{"cardA":"XMZhKSYZoMERa_SivlRka","cardB":"Zp82hHMZZbbMvAhf-_r6-","color":"black"},{"cardA":"XMZhKSYZoMERa_SivlRka","cardB":"XMZhKSYZoMERa_SivlRka","color":"black"},{"cardA":"Xzrdn8Iw6lGiaiE9i-e4x","cardB":"XMZhKSYZoMERa_SivlRka","color":"black"},{"cardA":"ZrjCApiMvYBldIecV70tv","cardB":"b4Cu9Yy2Gcjr6GLXwKqsk","color":"black"},{"cardA":"Xzrdn8Iw6lGiaiE9i-e4x","cardB":"ZrjCApiMvYBldIecV70tv","color":"black"},{"cardA":"ZrjCApiMvYBldIecV70tv","cardB":"RLyyPkwgEIuO6j3QNyeJE","color":"black"},{"cardA":"Rt6tKDGgHSMCG4x9OhV-w","cardB":"12DwYiFyx3tZ2jgZNg3me","color":"black"},{"cardA":"12DwYiFyx3tZ2jgZNg3me","cardB":"aHvXqxtiVpIMokWHhzCLu","color":"black"},{"cardA":"2H1s3xKAT3MOLVI_6kZyx","cardB":"jfopSgfbCxyaTo0P68JG6","color":"black"},{"cardA":"jfopSgfbCxyaTo0P68JG6","cardB":"aHvXqxtiVpIMokWHhzCLu","color":"black"},{"cardA":"2H1s3xKAT3MOLVI_6kZyx","cardB":"12DwYiFyx3tZ2jgZNg3me","color":"black"},{"cardA":"Uof8igBlzlcwLx06g2VAT","cardB":"0NteeQxrkH_WKKMshKz87","color":"black"},{"cardA":"0NteeQxrkH_WKKMshKz87","cardB":"Rt6tKDGgHSMCG4x9OhV-w","color":"black"},{"cardA":"sDIHHiNycpXc1YyyYQuB4","cardB":"kNZjDdwXqPTFnjueCEznC","color":"black"},{"cardA":"Ljt6lVvQm_pG543ZkZVh0","cardB":"sDIHHiNycpXc1YyyYQuB4","color":"black"},{"cardA":"Ec4rQ56VHJv3U_LynVVNm","cardB":"Ljt6lVvQm_pG543ZkZVh0","color":"black"},{"cardA":"HUmvF79Lnch9f1P5keoT1","cardB":"1z7Nh0LynlkIz55p18GjH","color":"black"},{"cardA":"6TaTlE6PPe1YdfnY42Im-","cardB":"1z7Nh0LynlkIz55p18GjH","color":"black"},{"cardA":"qB4Iet4BRB_WYamZNTTyv","cardB":"6TaTlE6PPe1YdfnY42Im-","color":"black"},{"cardA":"doA3YkcXQUV-i2Chb1rP0","cardB":"HUmvF79Lnch9f1P5keoT1","color":"black"},{"cardA":"dcmaWixw7K-X9ct0IS8Jn","cardB":"qB4Iet4BRB_WYamZNTTyv","color":"black"},{"cardA":"doA3YkcXQUV-i2Chb1rP0","cardB":"1DYlseoWFIL1J2F1viJY0","color":"black"}],"cardStyles":[{"id":"STYLE-HEADING","name":"heading","properties":{"text-size":"30px","text-center":true,"card-color":"#00000040","custom-css":".card-body { align-items: center; font-weight: bold; } .card-root { --card-edge-color: rgba(0, 0, 0, 25%); }"}},{"id":"STYLE-GRID","name":"grid","properties":{"custom-css":".card-body { line-height: 1.35em; background-image: linear-gradient(gainsboro 1px, transparent 1px), linear-gradient(90deg, gainsboro 1px, transparent 1px); background-size: 1.3em 1.3em; background-position: .75em .75em; }"}},{"id":"STYLE-TERMINAL","name":"terminal","properties":{"text-font":"monospace","text-color":"#00ff00ff","card-color":"#000000FF"}},{"id":"EeMLC4dJM4-iD3bhd2BWk","name":"disabled","properties":{"text-color":"#7d7d7dff","card-color":"#ffffff7c"}},{"id":"yrKZvizTDGthzyGX_AA-X","name":"heading 2","properties":{"text-size":"17px","card-color":"#ffffff76"}},{"id":"1HQnPB8fc0zpeLqCCGokQ","name":"context","properties":{"card-color":"#e5efd2ff","custom-css":""}},{"id":"CyZclJHl2fVSpLw53gn1Q","name":"information","properties":{"card-color":"#d2deefff","custom-css":""}},{"id":"vc_VZePmvF5KufvjyQGuX","name":"prompt","properties":{"card-color":"#efd6d2ff","custom-css":""}}],"boardStyle":{"background-color":"#e4decd"}}</script>
+    <script>loadData();</script>
+    <script id="project-data-deferred" type="text/json">{}</script>
+    <script id="font" type="text/css" data-font-family="Lora">@font-face {
+    font-family: 'Lora';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(data:font/woff2;base64,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) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+    </script>
+    <script>loadDataDeferred();</script>
+  
+</body></html>
