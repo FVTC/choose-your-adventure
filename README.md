@@ -13,6 +13,8 @@ This framework allows you to create interactive adventures using Markdown files.
 
 [Space Battles](https://github.com/fvtc/choose-your-adventure/blob/master/space-battles/_start-here.md) — A Star Wars-inspired branching adventure.
 
+[The Last Signal](the-last-signal/_start-here.md) — Explore an underwater research station, make choices, and discover four endings.
+
 ## 📁 Folder Structure
 
 Each story should live in its own folder.
