@@ -12,3 +12,4 @@ In a daring strike, the rebels have acquired secret plans to the Dominion’s ul
 Pursued by Dominion warships, a lone diplomatic cruiser races home, carrying hope for the galaxy… and destiny for a farm boy on a forgotten desert world.
 
 - 🚀 [Begin your journey](./scene1.md)
+
