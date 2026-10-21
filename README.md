@@ -51,7 +51,7 @@ A short paragraph or two describing the scene. This is where you set the stage f
 
 > Optional: Include a blockquote for a character's dialogue or internal thoughts.
 
-Then present the choices using bullet points. Each choice should link to another scene file:
+Then present the choices using bullet points. Each choice should link to another scene file:  
 
 - 🛸 [Go to the spaceport](./scene2A.md)
 - 🤖 [Talk to the droid](./scene2B.md)
