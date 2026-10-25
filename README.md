@@ -1,106 +1,76 @@
+# The Lost Signal
 
-# ✨ A Markdown-Based Adventure Framework
+A sci-fi mystery choose-your-own-adventure set aboard the abandoned research vessel **USS Horizon**.
 
-Welcome! This repo hosts interactive, emoji-powered **"choose your own adventure"** stories written entirely in Markdown. Each story is structured with branching scenes, embedded choices, and a clear path system — designed for maximum flexibility and fun.
-
-If you'd like to create your own interactive story using this format, read on!
-
-This framework allows you to create interactive adventures using Markdown files. Each scene is a separate Markdown file, and you can link them together to create a branching narrative.
+Authors: [Chance](https://github.com/Chance0813) and [Nicky](https://github.com/hopperskotch)
 
 ---
 
-## 🌟 Example Story
+## Story
 
-[Space Battles](https://github.com/fvtc/choose-your-adventure/blob/master/space-battles/_start-here.md) — A Star Wars-inspired branching adventure.
+It is the year 2727.  
 
-## 📁 Folder Structure
+A distress signal has been detected from the USS Horizon, a research ship that vanished nearly twenty years ago. The vessel is drifting near an unexplored planet. Its engines are offline, its communications are dead, and no life signs can be detected… yet the emergency beacon is still transmitting.
 
-Each story should live in its own folder.
+You and your teammate are sent to board the Horizon and find out what happened to its crew.
 
-Each scene is a Markdown file. You can name the files whatever you like, but they should follow a consistent naming convention (e.g., `scene1.md`, `scene2.md`, etc.). However, the first scene should always be named `_start-here.md` to indicate the starting point of the adventure. The underscore prefix helps to keep it at the top of the folder listing.
+The ship is damaged. The AI is acting strangely. Something is moving in the lower decks.
 
-For an example, the folder structure for a story might look like this:
+Your choices will decide what you uncover — and whether you make it back.
 
+---
+
+## How to Play
+
+1. Start at [`_start-here.md`](./uss-horizon/_start-here.md)
+2. Click the choices at the bottom of each scene
+3. Follow the links to continue the story
+
+There are **3 different endings** to find:
+
+- 🚀 **Escape Pods** – run for safety and never learn the truth
+- 🌀 **The Truth** – open the unit and watch reality loop back on itself
+- 🦆 **Going Home** – treat Kevin with kindness and bring him home
+
+---
+
+## File Structure
+
+```text
+README.md
+uss-horizon/
+├── _start-here.md          ← Start here
+├── img/
+│   ├── spaceship.jpg
+│   ├── space-bed.jpg
+│   └── black-hole.png
+└── scenes/
+    ├── scene1.md
+    ├── scene2.md   scene2A.md   scene2B.md
+    ├── scene3.md   scene3A.md
+    ├── scene4.md   scene4A.md
+    ├── scene5.md   scene5A.md   scene5B.md
+    ├── scene6.md   scene6A.md
+    ├── scene7.md
+    ├── scene8.md
+    ├── scene9.md
+    ├── scene10.md  scene10A.md
+    ├── scene11.md  scene11A.md
+    ├── scene12.md  scene12A.md  scene12B.md  scene12C.md
+    ├── scene13.md  scene13A.md  scene13B.md
+    ├── scene14.md
+    ├── scene15.md  scene15A.md  ← Ending: The Truth
+    ├── scene16.md                ← Ending: Going Home
+    └── scene17.md                ← Ending: Escape Pods
 ```
-space-battles/
-├── _start-here.md
-├── scene1.md
-├── scene2.md
-├── scene3.md
-├── scene4.md
-├── scene5.md
-├── scene6A.md
-├── scene6B.md
-├── scene6C.md
-├── scene7A.md
-├── scene7B.md
-├── scene8A.md
-├── scene9A.md
-├── scene10A.md
-├── scene10B.md
-```
 
-## 📖 Writing Scenes
+---
 
-Each scene is a Markdown file that contains the text of the scene, along with choices that link to other scenes. Here’s a basic structure for a scene:
+## Credits
 
-```markdown
-# Scene Title
+Created as a collaborative Markdown adventure,
+modified by: [Chance](https://github.com/Chance0813) and [Nicky](https://github.com/hopperskotch)
 
-A short paragraph or two describing the scene. This is where you set the stage for the choices that follow.
+Story concept: The Last Signal  
 
-> Optional: Include a blockquote for a character's dialogue or internal thoughts.
-
-Then present the choices using bullet points. Each choice should link to another scene file:
-
-- 🛸 [Go to the spaceport](./scene2A.md)
-- 🤖 [Talk to the droid](./scene2B.md)
-- 🚀 [Board the starship](./scene2C.md)
-```
-
-✅ Use emoji to add tone and make choices visually distinct.
-
-✅ Keep scene names short and match the filenames (scene1.md, scene2A.md, etc.).
-
-✅ Use relative links (./scene2A.md, not absolute URLs).
-
-
-## 🪐 Design Tips
-
-- Keep choices to 2–3 per scene to avoid overwhelming readers.
-
-- Looping and dead ends are welcome — failure is part of the fun!
-
-- Feel free to mimic familiar storylines or create something totally new.
-
-- Keep your tone consistent (humorous, serious, classic sci-fi, etc.).
-
-
-## 💡 Getting Started
-
-Want to start a new story? Fork and clone this repo, then:
-
-1. Create a new folder for your story.
-2. Add an `_start-here.md` file as the entry point.
-3. Write your scenes in Markdown files, linking them together with choices.
-4. Use relative links to connect scenes (e.g., `./scene2A.md`).
-5. Test your links to ensure they work correctly.
-
-## 🧑‍🚀 Contributing
-
-Pull requests are welcome! If submitting a new story:
-
-Place it in a new folder under /your-story-name/.
-
-Keep your Markdown clean, readable, and consistent.
-
-Make sure all links resolve correctly.
-
-## 🔌 Plug-in Recommendation
-
-For a better writing experience, consider using Matt Bierner's [Markdown Preview GitHub Styling](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-preview-github-styles) extension in VS Code. It provides a GitHub-like preview of your Markdown files, making it easier to visualize your story as you write.
-
-Once installed, you can open the Markdown preview with the shortcut `Ctrl+Shift+V` (or `Cmd+Shift+V` on macOS) to see how your story will look with GitHub's styling.
-
-## 📬 Questions?
-Open an issue or start a discussion — we’re always happy to help storytellers bring their universe to life!
+Setting: USS Horizon, 2727
